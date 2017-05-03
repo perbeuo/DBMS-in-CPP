@@ -15,6 +15,8 @@
 
 BEGIN_MESSAGE_MAP(CdbmsApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+	ON_COMMAND(ID_SYSTEM_EXIT, &CdbmsApp::OnSystemExit)
+	ON_COMMAND(ID_HELP_ABOUTDBMS, &CdbmsApp::OnHelpAboutdbms)
 END_MESSAGE_MAP()
 
 
@@ -91,4 +93,20 @@ BOOL CdbmsApp::InitInstance()
 	//  而不是启动应用程序的消息泵。
 	return FALSE;
 }
+
+
+
+void CdbmsApp::OnSystemExit()
+{
+	AfxGetMainWnd()->SendMessage(WM_CLOSE);
+}
+
+
+void CdbmsApp::OnHelpAboutdbms()
+{
+	CDialog* dlg = new CDialog;
+	dlg->Create(MAKEINTRESOURCE(IDD_ABOUTBOX));        //红色部分为对应菜单项的ID
+	dlg->ShowWindow(1);
+}
+
 

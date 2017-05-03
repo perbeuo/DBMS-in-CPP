@@ -28,6 +28,9 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	afx_msg void OnAltX();
+//	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -40,6 +43,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+//	ON_COMMAND(ID_SYSTEM_EXIT, &CAboutDlg::OnAltX)
 END_MESSAGE_MAP()
 
 
@@ -71,7 +75,9 @@ END_MESSAGE_MAP()
 BOOL CdbmsDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
+	HMENU m_hMenu1;
+	m_hMenu1=LoadMenu(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDR_MENU1));
+	::SetMenu(this->GetSafeHwnd(),m_hMenu1);
 	// 将“关于...”菜单项添加到系统菜单中。
 
 	// IDM_ABOUTBOX 必须在系统命令范围内。
@@ -98,6 +104,7 @@ BOOL CdbmsDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MENU1));
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -151,3 +158,15 @@ HCURSOR CdbmsDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+
+
+
+BOOL CdbmsDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if(::TranslateAccelerator(GetSafeHwnd(),hAccel,pMsg))
+		return   true;
+
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
