@@ -27,6 +27,9 @@ public:
 // й╣ож
 
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnSystemExit();
+	afx_msg void OnHelpAboutdbms();
+//	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 extern CdbmsApp theApp;
