@@ -1,35 +1,38 @@
-﻿生成启动时间为 2017/5/3 19:53:06。
-     1>项目“G:\shokudai\DBMS\DBMS-in-CPP\dbms\dbms\dbms.vcxproj”在节点 2 上(build 个目标)。
+﻿生成启动时间为 2017/5/4 13:12:44。
+     1>项目“D:\DBMS-in-CPP\dbms\dbms\dbms.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Debug\dbms.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
-         所有输出均为最新。
-         G:\software\vs2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\dbms.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt dbms.cpp dbmsDlg.cpp
-         dbms.cpp
-         正在生成代码...
-         正在跳过...(未检测到相关更改)
+         H:\VS2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\dbms.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         H:\VS2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\dbms.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt AppException.cpp dbms.cpp dbmsDlg.cpp
          dbmsDlg.cpp
+         dbms.cpp
+         AppException.cpp
+         正在生成代码...
        ResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0804" /IDebug\ /nologo /fo"Debug\dbms.res" dbms.rc 
        ManifestResourceCompile:
-         所有输出均为最新。
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\dbms.exe.embed.manifest.res" Debug\dbms_manifest.rc 
        Link:
-         G:\software\vs2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\shokudai\DBMS\DBMS-in-CPP\dbms\Debug\dbms.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\dbms.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"G:\shokudai\DBMS\DBMS-in-CPP\dbms\Debug\dbms.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\shokudai\DBMS\DBMS-in-CPP\dbms\Debug\dbms.lib" /MACHINE:X86 Debug\dbms.res
+         H:\VS2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\DBMS-in-CPP\dbms\Debug\dbms.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\dbms.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\DBMS-in-CPP\dbms\Debug\dbms.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\DBMS-in-CPP\dbms\Debug\dbms.lib" /MACHINE:X86 Debug\dbms.res
          Debug\dbms.exe.embed.manifest.res
+         Debug\AppException.obj
          Debug\dbms.obj
          Debug\dbmsDlg.obj
          Debug\stdafx.obj
+         LINK : 没有找到 D:\DBMS-in-CPP\dbms\Debug\dbms.exe 或上一个增量链接没有生成它；正在执行完全链接
        Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\dbms.exe.embed.manifest" /manifest Debug\dbms.exe.intermediate.manifest G:\software\vs2010\VC\Include\Manifest\dpiaware.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\dbms.exe.embed.manifest" /manifest Debug\dbms.exe.intermediate.manifest H:\VS2010\VC\Include\Manifest\dpiaware.manifest
          所有输出均为最新。
        LinkEmbedManifest:
          所有输出均为最新。
-         dbms.vcxproj -> G:\shokudai\DBMS\DBMS-in-CPP\dbms\Debug\dbms.exe
+         dbms.vcxproj -> D:\DBMS-in-CPP\dbms\Debug\dbms.exe
        FinalizeBuildStatus:
          正在删除文件“Debug\dbms.unsuccessfulbuild”。
          正在对“Debug\dbms.lastbuildstate”执行 Touch 任务。
-     1>已完成生成项目“G:\shokudai\DBMS\DBMS-in-CPP\dbms\dbms\dbms.vcxproj”(build 个目标)的操作。
+     1>已完成生成项目“D:\DBMS-in-CPP\dbms\dbms\dbms.vcxproj”(build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:00.65
+已用时间 00:00:13.30

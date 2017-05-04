@@ -38,7 +38,7 @@
 #include <afxcontrolbars.h>     // 功能区和控件条的 MFC 支持
 #include <afxcview.h>
 
-//#include "AppException.h"	// Custom exception class
+#include "AppException.h"	// Custom exception class
 #include "DataStructure.h"	// Data structure definition class
 #include "CharHelper.h"		// Character processing tool class
 

@@ -70,6 +70,9 @@
     <ClInclude Include="DBDao.h">
       <Filter>Dao\头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AppException.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -89,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="DBDao.cpp">
       <Filter>Dao</Filter>
+    </ClCompile>
+    <ClCompile Include="AppException.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
