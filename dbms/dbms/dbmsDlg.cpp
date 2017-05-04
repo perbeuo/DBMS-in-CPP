@@ -6,6 +6,8 @@
 #include "dbms.h"
 #include "dbmsDlg.h"
 #include "afxdialogex.h"
+#include "DBEntity.h"
+#include "DBLogic.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,12 +63,14 @@ CdbmsDlg::CdbmsDlg(CWnd* pParent /*=NULL*/)
 void CdbmsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_DBNAME, m_cbDBName);
 }
 
 BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDOK, &CdbmsDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -105,6 +109,20 @@ BOOL CdbmsDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MENU1));
+	//读取数据库
+	CDBLogic dbLogic;
+	CDBEntity DBE;
+	DBE.SetName(_T("test"));
+	try{
+		if (dbLogic.GetDatabase(DBE) == false){
+			throw new CAppException(_T("Failed to load database！"));
+		}
+		m_cbDBName.AddString(DBE.GetName());
+	}catch (CAppException* e){
+		CString errMsg;
+		errMsg = e->GetErrorMessage();
+		MessageBox(errMsg, _T("ERROR"));
+	}
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -169,4 +187,9 @@ BOOL CdbmsDlg::PreTranslateMessage(MSG* pMsg)
 		return   true;
 
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CdbmsDlg::OnBnClickedOk()
+{
 }

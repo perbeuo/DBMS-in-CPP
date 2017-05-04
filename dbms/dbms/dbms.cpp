@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "dbms.h"
 #include "dbmsDlg.h"
+#include "CDBDLG.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,6 +18,7 @@ BEGIN_MESSAGE_MAP(CdbmsApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 	ON_COMMAND(ID_SYSTEM_EXIT, &CdbmsApp::OnSystemExit)
 	ON_COMMAND(ID_HELP_ABOUTDBMS, &CdbmsApp::OnHelpAboutdbms)
+	ON_COMMAND(ID_DATABASE_CREATEDATABASE, &CdbmsApp::OnDatabaseCreatedatabase)
 END_MESSAGE_MAP()
 
 
@@ -41,6 +43,7 @@ CdbmsApp theApp;
 
 BOOL CdbmsApp::InitInstance()
 {
+	AfxOleInit();
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。否则，将无法创建窗口。
@@ -101,12 +104,17 @@ void CdbmsApp::OnSystemExit()
 	AfxGetMainWnd()->SendMessage(WM_CLOSE);
 }
 
-
 void CdbmsApp::OnHelpAboutdbms()
 {
 	CDialog* dlg = new CDialog;
-	dlg->Create(MAKEINTRESOURCE(IDD_ABOUTBOX));        //红色部分为对应菜单项的ID
+	dlg->Create(MAKEINTRESOURCE(IDD_ABOUTBOX));
 	dlg->ShowWindow(1);
 }
 
+void CdbmsApp::OnDatabaseCreatedatabase()
+{
+	CCDBDlg* dlg = new CCDBDlg;
+	dlg->Create(MAKEINTRESOURCE(IDD_CREATE_DATABASE));
+	dlg->ShowWindow(1);
+}
 

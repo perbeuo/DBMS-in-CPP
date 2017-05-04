@@ -32,4 +32,6 @@ protected:
 public:
 	HACCEL hAccel;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedOk();
+	CComboBox m_cbDBName;
 };
