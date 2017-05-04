@@ -2,7 +2,7 @@
 #include "DBDao.h"
 
 //创建数据库
-bool CDBDao::Create(const CString strFilepath, CDBEntity db, bool bAppend{
+bool CDBDao::Create(const CString strFilepath, CDBEntity db, bool bAppend){
 	try{
 	CFile file;
 	if (bAppend == true){
@@ -59,6 +59,50 @@ bool CDBDao::GetDatabase(const CString strFilepath, CDBEntity &db){
 	throw new CAppException(_T("Failed to create the database file!"));
 	}catch(...){
 	throw new CAppException(_T("Failed to create the database file!"));
+	}
+	return false;
+}
+//创建文件
+bool CDBDao::CreateFile(const CString strFileName){
+	try{
+		//按文件路径创建文件
+		for(int i = 0; i < strFileName.GetLength(); i++){
+			if((_T('\\') == strFileName.GetAt(i) || _T('/') == strFileName.GetAt(i)) && i != 2){
+				CString fileDirectory;
+				fileDirectory = strFileName.Left(i);
+				if(!CreateDirectory(fileDirectory, NULL) && 183 != GetLastError())
+				{
+					return false;
+				}
+			}
+		}
+		//创建文件
+		CFile file;
+		if(!file.Open(strFileName,CFile::modeCreate))
+			return false;
+		file.Close();
+		return true;
+	}catch(CException* e){
+	e->Delete();
+	throw new CAppException(_T("Failed to create file!"));
+	}catch(...){
+	throw new CAppException(_T("Failed to create file!"));
+	}
+	return false;
+}
+//判断文件是否有效
+bool CDBDao::IsValidFile(const CString strPath){
+	CFile file;
+	try{
+		if(file.Open(strPath, CFile::modeRead | CFile::shareDenyNone) == TRUE){
+			file.Close();
+			return true;
+		}
+	}catch(CException* e){
+	e->Delete();
+	throw new CAppException(_T("Failed to create file!"));
+	}catch(...){
+	throw new CAppException(_T("Failed to create file!"));
 	}
 	return false;
 }

@@ -31,6 +31,12 @@
     <Filter Include="Dao\头文件">
       <UniqueIdentifier>{a92bfd8a-c61d-4f1b-8bf5-e4b48b143d3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{1f8518e7-9bbc-4387-824d-7711dbe78b71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic\头文件">
+      <UniqueIdentifier>{f08a09b9-74d0-4422-a35f-ba694fb21d5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -73,6 +79,15 @@
     <ClInclude Include="AppException.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FileLogic.h">
+      <Filter>Logic\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DBLogic.h">
+      <Filter>Logic\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDBDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -94,6 +109,15 @@
       <Filter>Dao</Filter>
     </ClCompile>
     <ClCompile Include="AppException.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FileLogic.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="DBLogic.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="CDBDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
