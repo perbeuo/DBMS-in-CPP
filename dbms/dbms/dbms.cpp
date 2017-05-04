@@ -17,6 +17,7 @@ BEGIN_MESSAGE_MAP(CdbmsApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 	ON_COMMAND(ID_SYSTEM_EXIT, &CdbmsApp::OnSystemExit)
 	ON_COMMAND(ID_HELP_ABOUTDBMS, &CdbmsApp::OnHelpAboutdbms)
+	ON_COMMAND(ID_TABLE_CREATETABLE, &CdbmsApp::OnTableCreatetable)
 END_MESSAGE_MAP()
 
 
@@ -110,3 +111,11 @@ void CdbmsApp::OnHelpAboutdbms()
 }
 
 
+
+
+void CdbmsApp::OnTableCreatetable()
+{
+	// TODO: 在此添加命令处理程序代码
+
+
+}
