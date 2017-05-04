@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{099542b5-a303-441f-b61d-873279a5d694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util\头文件">
+      <UniqueIdentifier>{545dc136-b482-486b-9402-6ecace055a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{51240c67-fe1e-4abe-975a-d3de81810483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\头文件">
+      <UniqueIdentifier>{047efad4-17f0-4ba2-ba77-e3d7f0e23455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dao">
+      <UniqueIdentifier>{b480fbf3-b36b-48f1-9079-035c3a2606bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dao\头文件">
+      <UniqueIdentifier>{a92bfd8a-c61d-4f1b-8bf5-e4b48b143d3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -40,6 +58,18 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CharHelper.h">
+      <Filter>util\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DBEntity.h">
+      <Filter>Entity\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructure.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DBDao.h">
+      <Filter>Dao\头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -50,6 +80,15 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CharHelper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="DBEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="DBDao.cpp">
+      <Filter>Dao</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
