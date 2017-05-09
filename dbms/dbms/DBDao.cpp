@@ -2,23 +2,39 @@
 #include "DBDao.h"
 
 //创建数据库
-bool CDBDao::Create(const CString strFilepath, CDBEntity db, bool bAppend){
+bool CDBDao::Create(const CString DBListFilePath, const CString strFilepath, CDBEntity db, bool bAppend){
 	try{
 	CFile file;
+	CStdioFile DBListFile;
 	if (bAppend == true){
 	if (file.Open(strFilepath, CFile::modeWrite | CFile::shareDenyWrite) == FALSE)
 			{
 				return false;
 			}
+	if (DBListFile.Open(DBListFilePath, CFile::modeWrite | CFile::shareDenyWrite) == FALSE)
+		{
+			return false;
+		}
+
 	}else{
 	if (file.Open(strFilepath, CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite) == FALSE)
 			{
 				return false;
 			}
+	if (DBListFile.Open(DBListFilePath, CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite) == FALSE)
+			{
+				return false;
+			}
 	}
-	file.SeekToBegin();
+	file.SeekToEnd();
 	file.Write(&db.GetBlock(), sizeof(DatabaseBlock));
 	file.Close();
+	CString dbName;
+	dbName.Format(_T("%s\r\n"),db.GetName());
+	DBListFile.Seek(0,CFile::end);
+	//DBListFile.SeekToEnd();
+	DBListFile.WriteString(dbName);
+	DBListFile.Close();
 	return true;
 	}catch(CException* e){
 	e->Delete();

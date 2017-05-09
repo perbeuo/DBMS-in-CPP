@@ -1,5 +1,5 @@
 #pragma once
-
+#define WM_UPDATE_DIALOG_DBN WM_USER + 77
 
 // CCDBDlg ¶Ô»°¿ò
 
