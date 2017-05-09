@@ -6,6 +6,12 @@
 #include "dbms.h"
 #include "dbmsDlg.h"
 #include "afxdialogex.h"
+#include "DBEntity.h"
+#include "DBLogic.h"
+#include "TBLDlg.h"
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,6 +37,8 @@ protected:
 public:
 //	afx_msg void OnAltX();
 //	virtual BOOL PreTranslateMessage(MSG* pMsg);
+protected:
+//	afx_msg LRESULT OnUpdateDialogDb(WPARAM wParam, LPARAM lParam);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -44,6 +52,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 //	ON_COMMAND(ID_SYSTEM_EXIT, &CAboutDlg::OnAltX)
+//	ON_MESSAGE(WM_UPDATE_DIALOG_DB, &CAboutDlg::OnUpdateDialogDb)
 END_MESSAGE_MAP()
 
 
@@ -61,12 +70,16 @@ CdbmsDlg::CdbmsDlg(CWnd* pParent /*=NULL*/)
 void CdbmsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_DBNAME, m_cbDBName);
 }
 
 BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDOK, &CdbmsDlg::OnBnClickedOk)
+	//ON_MESSAGE(WM_UPDATA_DIALOG, &CdbmsDlg::OnUpdateDialogDB)
+	ON_MESSAGE(WM_UPDATE_DIALOG_DBN, &CdbmsDlg::OnUpdateDialogDbn)
 END_MESSAGE_MAP()
 
 
@@ -105,6 +118,39 @@ BOOL CdbmsDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MENU1));
+	//读取数据库名字并显示
+	CStdioFile dbList;
+	//std::ifstream out;
+	CString dbListPath;
+	CString dbName;
+	//char temp[100];
+	CFileLogic fileLgc;
+	dbListPath = fileLgc.GetDBListFile();
+	//out.open(dbListPath, std::ios::in);
+	//while(!out.eof()){
+	//	out.getline(temp, sizeof(VARCHAR));
+   // }
+	if (dbList.Open(dbListPath, CFile::modeRead) == FALSE)
+		return false;
+	while(dbList.ReadString(dbName)){
+		int strLen;
+		strLen = dbName.GetLength();
+		ReadStringCharToUnicode(dbName);
+		m_cbDBName.AddString(dbName);
+	}
+/*	CDBLogic dbLogic;
+	CDBEntity DBE;
+	DBE.SetName(_T("321"));
+	try{
+		if (dbLogic.GetDatabase(DBE) == false){
+			throw new CAppException(_T("Failed to load database！"));
+		}
+		m_cbDBName.AddString(DBE.GetName());
+	}catch (CAppException* e){
+		CString errMsg;
+		errMsg = e->GetErrorMessage();
+		MessageBox(errMsg, _T("ERROR"));
+	}*/
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -159,14 +205,77 @@ HCURSOR CdbmsDlg::OnQueryDragIcon()
 }
 
 
-
-
-
-
 BOOL CdbmsDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if(::TranslateAccelerator(GetSafeHwnd(),hAccel,pMsg))
 		return   true;
 
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+
+void CdbmsDlg::OnBnClickedOk()
+{
+}
+
+void CdbmsDlg::OnUpdateDialogDB(){
+
+}
+
+void CdbmsDlg::ReadStringCharToUnicode(CString &str)
+{
+char *szBuf = new char[str.GetLength() + 1];//注意“+1”，char字符要求结束符，而CString没有
+memset(szBuf, '\0',str.GetLength());
+
+int i;
+for ( i = 0 ; i < str.GetLength(); i++)
+{
+szBuf[i] = (char)str.GetAt(i);
+}
+szBuf[i] = '\0';//结束符。否则会在末尾产生乱码。
+
+int nLen;
+WCHAR *ptch;
+CString strOut;
+if(szBuf == NULL)
+{
+return ;
+}
+nLen = MultiByteToWideChar(CP_ACP, 0, szBuf, -1, NULL, 0);//获得需要的宽字符字节数
+ptch = new WCHAR[nLen];
+memset(ptch, '\0', nLen);
+MultiByteToWideChar(CP_ACP, 0, szBuf, -1, ptch, nLen);
+str.Format(_T("%s"), ptch);
+
+if(NULL != ptch)
+delete [] ptch;
+ptch = NULL;
+
+if(NULL != szBuf)
+delete []szBuf;
+szBuf = NULL;
+return ;
+}
+
+//afx_msg LRESULT CAboutDlg::OnUpdateDialogDb(WPARAM wParam, LPARAM lParam)
+//{
+//	return 0;
+//}
+
+
+afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
+{
+	CStdioFile dbList;
+	CString dbListPath;
+	CString dbName;
+	CFileLogic fileLgc;
+	dbListPath = fileLgc.GetDBListFile();
+	m_cbDBName.ResetContent();
+	if (dbList.Open(dbListPath, CFile::modeRead) == FALSE)
+		return false;
+	while(dbList.ReadString(dbName)){
+		ReadStringCharToUnicode(dbName);
+		m_cbDBName.AddString(dbName);
+	}
+	return 0;
 }
