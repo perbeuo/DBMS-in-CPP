@@ -31,6 +31,7 @@ public:
 	afx_msg void OnHelpAboutdbms();
 //	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnDatabaseCreatedatabase();
+	afx_msg void OnTableCreatetable();
 };
 
 extern CdbmsApp theApp;

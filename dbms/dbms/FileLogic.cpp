@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "FileLogic.h"
 
-	// µÃµ½Êı¾İ¿âÃèÊöÎÄ¼şµÄÎ»ÖÃ
+	// å¾—åˆ°æ•°æ®åº“æè¿°æ–‡ä»¶çš„ä½ç½®
 CString CFileLogic::GetDBFile(const CString strDBName){
 	CString filePath = _T("");
 	CString DBNameLogicPath = strDBName + _T(".db");
@@ -14,7 +14,7 @@ CString CFileLogic::GetDBFile(const CString strDBName){
 	return filePath;
 }
 
-	// µÃµ½Êı¾İ¿âÎÄ¼ş¼ĞµÄÎ»ÖÃ
+	// å¾—åˆ°æ•°æ®åº“æ–‡ä»¶å¤¹çš„ä½ç½®
 CString CFileLogic::GetDBFolder(const CString strDBName){
 	CString fileFolder = _T("");
 	try{
@@ -31,7 +31,7 @@ CString CFileLogic::GetDBFolder(const CString strDBName){
 	return fileFolder;
 }
 
-	// ½«Ïà¶ÔÂ·¾¶×ª»¯Îª¾ø¶ÔÂ·¾¶
+	// å°†ç›¸å¯¹è·¯å¾„è½¬åŒ–ä¸ºç»å¯¹è·¯å¾„
 CString CFileLogic::GetAbsolutePath(const CString strRelativePath){
 	CString strFolder = _T("");
 	try
@@ -69,4 +69,25 @@ CString CFileLogic::GetDBListFile(void){
 		throw e;
 	}
 	return filePath;
+
+//è·å¾—è¡¨æ–‡ä»¶
+CString CFileLogic::GetTableFile(const CString strDBName)
+{
+	CString strPath = _T("");
+	try
+	{
+		// è·å¾—è¡¨æè¿°æ–‡ä»¶çš„ç»å¯¹è·¯å¾„ (*.tb)
+		strPath.Format(_T("data\\%s\\%s.tb"), strDBName, strDBName);
+		strPath = GetAbsolutePath(strPath);
+	}
+	catch (CAppException* e)
+	{
+		throw e;
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to get tb file path!"));
+	}
+	return strPath;
+
 }

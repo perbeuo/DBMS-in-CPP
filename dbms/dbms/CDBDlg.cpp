@@ -1,4 +1,4 @@
-// CDBDlg.cpp : ÊµÏÖÎÄ¼þ
+// CDBDlg.cpp : å®žçŽ°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -9,7 +9,7 @@
 #include "DBLogic.h"
 
 
-// CCDBDlg ¶Ô»°¿ò
+// CCDBDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CCDBDlg, CDialogEx)
 
@@ -30,10 +30,10 @@ CCDBDlg::~CCDBDlg()
 
 void CCDBDlg::OnFinalRelease()
 {
-	// ÊÍ·ÅÁË¶Ô×Ô¶¯»¯¶ÔÏóµÄ×îºóÒ»¸öÒýÓÃºó£¬½«µ÷ÓÃ
-	// OnFinalRelease¡£»ùÀà½«×Ô¶¯
-	// É¾³ý¸Ã¶ÔÏó¡£ÔÚµ÷ÓÃ¸Ã»ùÀàÖ®Ç°£¬ÇëÌí¼ÓÄúµÄ
-	// ¶ÔÏóËùÐèµÄ¸½¼ÓÇåÀí´úÂë¡£
+	// é‡Šæ”¾äº†å¯¹è‡ªåŠ¨åŒ–å¯¹è±¡çš„æœ€åŽä¸€ä¸ªå¼•ç”¨åŽï¼Œå°†è°ƒç”¨
+	// OnFinalReleaseã€‚åŸºç±»å°†è‡ªåŠ¨
+	// åˆ é™¤è¯¥å¯¹è±¡ã€‚åœ¨è°ƒç”¨è¯¥åŸºç±»ä¹‹å‰ï¼Œè¯·æ·»åŠ æ‚¨çš„
+	// å¯¹è±¡æ‰€éœ€çš„é™„åŠ æ¸…ç†ä»£ç ã€‚
 
 	CDialogEx::OnFinalRelease();
 }
@@ -52,9 +52,9 @@ END_MESSAGE_MAP()
 BEGIN_DISPATCH_MAP(CCDBDlg, CDialogEx)
 END_DISPATCH_MAP()
 
-// ×¢Òâ: ÎÒÃÇÌí¼Ó IID_ICDBDlg Ö§³Ö
-//  ÒÔÖ§³ÖÀ´×Ô VBA µÄÀàÐÍ°²È«°ó¶¨¡£´Ë IID ±ØÐëÍ¬¸½¼Óµ½ .IDL ÎÄ¼þÖÐµÄ
-//  µ÷¶È½Ó¿ÚµÄ GUID Æ¥Åä¡£
+// æ³¨æ„: æˆ‘ä»¬æ·»åŠ  IID_ICDBDlg æ”¯æŒ
+//  ä»¥æ”¯æŒæ¥è‡ª VBA çš„ç±»åž‹å®‰å…¨ç»‘å®šã€‚æ­¤ IID å¿…é¡»åŒé™„åŠ åˆ° .IDL æ–‡ä»¶ä¸­çš„
+//  è°ƒåº¦æŽ¥å£çš„ GUID åŒ¹é…ã€‚
 
 // {30E666E0-086D-4784-8B80-EB71D7067CA2}
 static const IID IID_ICDBDlg =
@@ -65,7 +65,7 @@ BEGIN_INTERFACE_MAP(CCDBDlg, CDialogEx)
 END_INTERFACE_MAP()
 
 
-// CCDBDlg ÏûÏ¢´¦Àí³ÌÐò
+// CCDBDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 void CCDBDlg::OnBnClickedDbinfoOk()
@@ -86,11 +86,13 @@ void CCDBDlg::OnBnClickedDbinfoOk()
 			if (dbLogic.CreateDatabase(DBE) == false)
 			{
 				//	If creates failure, throw an exception
-				throw new CAppException(_T("Failed to create database£¡"));
+				throw new CAppException(_T("Failed to create databaseï¼"));
 			}
 
 		}
-		CWnd *pWnd=CWnd::FindWindow(NULL,_T(RECEIVE1_TITLE));
+
+		CWnd *pWnd=CWnd::FindWindow(NULL,_T("dbms"));
+
 		pWnd->SendMessage(WM_UPDATE_DIALOG_DBN,NULL,0);
 	//HWND hWnd = ::FindWindowEx( this->GetParent()->m_hWnd, NULL, NULL, _T(RECEIVE1_TITLE)) ;
 	//FromHandle(hWnd)->SendMessage(WM_UPDATE_DIALOG_DBN,0,0);

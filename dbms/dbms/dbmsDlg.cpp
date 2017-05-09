@@ -1,5 +1,5 @@
 
-// dbmsDlg.cpp : ÊµÏÖÎÄ¼ş
+// dbmsDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -8,6 +8,10 @@
 #include "afxdialogex.h"
 #include "DBEntity.h"
 #include "DBLogic.h"
+#include "TBLDlg.h"
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 
 #include <iostream>
 #include <cstdlib>
@@ -18,20 +22,20 @@
 #endif
 
 
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_ABOUTBOX };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -56,7 +60,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CdbmsDlg ¶Ô»°¿ò
+// CdbmsDlg å¯¹è¯æ¡†
 
 
 
@@ -83,7 +87,7 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CdbmsDlg ÏûÏ¢´¦Àí³ÌĞò
+// CdbmsDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CdbmsDlg::OnInitDialog()
 {
@@ -91,9 +95,9 @@ BOOL CdbmsDlg::OnInitDialog()
 	HMENU m_hMenu1;
 	m_hMenu1=LoadMenu(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDR_MENU1));
 	::SetMenu(this->GetSafeHwnd(),m_hMenu1);
-	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
+	// å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
 
-	// IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+	// IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -111,14 +115,14 @@ BOOL CdbmsDlg::OnInitDialog()
 		}
 	}
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-	// TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
 	hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MENU1));
-	//¶ÁÈ¡Êı¾İ¿âÃû×Ö²¢ÏÔÊ¾
+	//è¯»å–æ•°æ®åº“åå­—å¹¶æ˜¾ç¤º
 	CStdioFile dbList;
 	//std::ifstream out;
 	CString dbListPath;
@@ -143,7 +147,7 @@ BOOL CdbmsDlg::OnInitDialog()
 	DBE.SetName(_T("321"));
 	try{
 		if (dbLogic.GetDatabase(DBE) == false){
-			throw new CAppException(_T("Failed to load database£¡"));
+			throw new CAppException(_T("Failed to load databaseï¼"));
 		}
 		m_cbDBName.AddString(DBE.GetName());
 	}catch (CAppException* e){
@@ -152,7 +156,7 @@ BOOL CdbmsDlg::OnInitDialog()
 		MessageBox(errMsg, _T("ERROR"));
 	}*/
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
 void CdbmsDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -168,19 +172,19 @@ void CdbmsDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CdbmsDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -188,7 +192,7 @@ void CdbmsDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -197,8 +201,8 @@ void CdbmsDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CdbmsDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -224,7 +228,7 @@ void CdbmsDlg::OnUpdateDialogDB(){
 
 void CdbmsDlg::ReadStringCharToUnicode(CString &str)
 {
-char *szBuf = new char[str.GetLength() + 1];//×¢Òâ¡°+1¡±£¬char×Ö·ûÒªÇó½áÊø·û£¬¶øCStringÃ»ÓĞ
+char *szBuf = new char[str.GetLength() + 1];//æ³¨æ„â€œ+1â€ï¼Œcharå­—ç¬¦è¦æ±‚ç»“æŸç¬¦ï¼Œè€ŒCStringæ²¡æœ‰
 memset(szBuf, '\0',str.GetLength());
 
 int i;
@@ -232,7 +236,7 @@ for ( i = 0 ; i < str.GetLength(); i++)
 {
 szBuf[i] = (char)str.GetAt(i);
 }
-szBuf[i] = '\0';//½áÊø·û¡£·ñÔò»áÔÚÄ©Î²²úÉúÂÒÂë¡£
+szBuf[i] = '\0';//ç»“æŸç¬¦ã€‚å¦åˆ™ä¼šåœ¨æœ«å°¾äº§ç”Ÿä¹±ç ã€‚
 
 int nLen;
 WCHAR *ptch;
@@ -241,7 +245,7 @@ if(szBuf == NULL)
 {
 return ;
 }
-nLen = MultiByteToWideChar(CP_ACP, 0, szBuf, -1, NULL, 0);//»ñµÃĞèÒªµÄ¿í×Ö·û×Ö½ÚÊı
+nLen = MultiByteToWideChar(CP_ACP, 0, szBuf, -1, NULL, 0);//è·å¾—éœ€è¦çš„å®½å­—ç¬¦å­—èŠ‚æ•°
 ptch = new WCHAR[nLen];
 memset(ptch, '\0', nLen);
 MultiByteToWideChar(CP_ACP, 0, szBuf, -1, ptch, nLen);
@@ -266,22 +270,16 @@ return ;
 afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 {
 	CStdioFile dbList;
-	//std::ifstream out;
+
 	CString dbListPath;
 	CString dbName;
-	//char temp[100];
 	CFileLogic fileLgc;
 	dbListPath = fileLgc.GetDBListFile();
-	//out.open(dbListPath, std::ios::in);
-	//while(!out.eof()){
-	//	out.getline(temp, sizeof(VARCHAR));
-   // }
+
 	m_cbDBName.ResetContent();
 	if (dbList.Open(dbListPath, CFile::modeRead) == FALSE)
 		return false;
 	while(dbList.ReadString(dbName)){
-		int strLen;
-		strLen = dbName.GetLength();
 		ReadStringCharToUnicode(dbName);
 		m_cbDBName.AddString(dbName);
 	}
