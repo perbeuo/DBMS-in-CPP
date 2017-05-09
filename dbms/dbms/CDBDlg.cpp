@@ -90,6 +90,11 @@ void CCDBDlg::OnBnClickedDbinfoOk()
 			}
 
 		}
+		CWnd *pWnd=CWnd::FindWindow(NULL,_T(RECEIVE1_TITLE));
+		pWnd->SendMessage(WM_UPDATE_DIALOG_DBN,NULL,0);
+	//HWND hWnd = ::FindWindowEx( this->GetParent()->m_hWnd, NULL, NULL, _T(RECEIVE1_TITLE)) ;
+	//FromHandle(hWnd)->SendMessage(WM_UPDATE_DIALOG_DBN,0,0);
+		//::SendMessage(NULL, WM_UPDATE_DIALOG_DBN, 0, 0);
 	}catch (CAppException* e){
 		CString errMsg;
 		errMsg = e->GetErrorMessage();

@@ -6,7 +6,7 @@ class CDBDao
 {
 public:
 	// 创建数据库
-	bool Create(const CString strFilepath, CDBEntity db, bool bAppend = true);
+	bool Create(const CString DBListFilePath, const CString strFilepath, CDBEntity db, bool bAppend = true);
 	// 读取数据库信息
 	bool GetDatabase(const CString strFilepath, CDBEntity &db);
 

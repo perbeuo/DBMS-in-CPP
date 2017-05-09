@@ -5,7 +5,8 @@
 bool CDBLogic::CreateDatabase(CDBEntity &db){
 	try{
 		//判断该数据库是否存在，若不存在则创建
-		CString DBFile = m_fileLogic.GetDBFile();
+		CString DBFile = m_fileLogic.GetDBFile(_T("test"));
+		CString DBListFile = m_fileLogic.GetDBListFile();
 		if(m_daoDB.IsValidFile(DBFile) == false){
 			if(m_daoDB.CreateFile(DBFile) == false){
 				return false;
@@ -17,7 +18,7 @@ bool CDBLogic::CreateDatabase(CDBEntity &db){
 		}
 		CString DBFolder = m_fileLogic.GetDBFolder(db.GetName());
 		db.SetFilepath(DBFolder);
-		if(m_daoDB.Create(DBFile, db) == false)
+		if(m_daoDB.Create(DBListFile, DBFile, db) == false)
 		{
 			return false;
 		}
@@ -37,7 +38,7 @@ bool CDBLogic::CreateDatabase(CDBEntity &db){
 bool CDBLogic::GetDatabase(CDBEntity &db){
 	try
 	{
-		return m_daoDB.GetDatabase(m_fileLogic.GetDBFile(), db);
+		return m_daoDB.GetDatabase(m_fileLogic.GetDBFile(_T("test")), db);
 	}
 	catch (CAppException* e)
 	{
