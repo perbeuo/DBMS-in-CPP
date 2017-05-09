@@ -2,10 +2,11 @@
 #include "FileLogic.h"
 
 	// 得到数据库描述文件的位置
-CString CFileLogic::GetDBFile(void){
+CString CFileLogic::GetDBFile(const CString strDBName){
 	CString filePath = _T("");
+	CString DBNameLogicPath = strDBName + _T(".db");
 	try{
-		filePath = GetAbsolutePath(_T("test.db"));
+		filePath = GetAbsolutePath(DBNameLogicPath);
 	}catch (CAppException* e)
 	{
 		throw e;
@@ -56,4 +57,16 @@ CString CFileLogic::GetAbsolutePath(const CString strRelativePath){
 	}
 
 	return strFolder;
+}
+
+CString CFileLogic::GetDBListFile(void){
+	CString filePath = _T("");
+	filePath = _T("DBList.dbl");
+	try{
+		filePath = GetAbsolutePath(filePath);
+	}catch (CAppException* e)
+	{
+		throw e;
+	}
+	return filePath;
 }
