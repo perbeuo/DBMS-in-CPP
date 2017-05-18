@@ -9,7 +9,10 @@ public:
 	CString GetDBFolder(const CString strDBName);
 	//得到数据库列表文件的位置
 	CString GetDBListFile(void);
+	// 获得数据库表描述文件路径
+	CString GetTableFile(const CString strDBName);
 
+	CString GetTbDefineFile(const CString strDBName, const CString strTableName);
 private:
 	// 将相对路径转化为绝对路径
 	CString GetAbsolutePath(const CString strRelativePath);

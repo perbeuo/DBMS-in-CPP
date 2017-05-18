@@ -8,7 +8,8 @@
 #include "afxdialogex.h"
 #include "DBEntity.h"
 #include "DBLogic.h"
-
+#include "TableLogic.h"
+#include "TBLDlg.h"
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
@@ -71,6 +72,8 @@ void CdbmsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO_DBNAME, m_cbDBName);
+	DDX_Control(pDX, IDC_LIST2, m_ctllist);
+	DDX_Control(pDX, IDC_COMBO_TABLENAME, m_cbTBLName);
 }
 
 BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
@@ -80,6 +83,8 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CdbmsDlg::OnBnClickedOk)
 	//ON_MESSAGE(WM_UPDATA_DIALOG, &CdbmsDlg::OnUpdateDialogDB)
 	ON_MESSAGE(WM_UPDATE_DIALOG_DBN, &CdbmsDlg::OnUpdateDialogDbn)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CdbmsDlg::OnLvnItemchangedList2)
+	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
 END_MESSAGE_MAP()
 
 
@@ -151,6 +156,20 @@ BOOL CdbmsDlg::OnInitDialog()
 		errMsg = e->GetErrorMessage();
 		MessageBox(errMsg, _T("ERROR"));
 	}*/
+
+	DWORD dwStyle = m_ctllist.GetExtendedStyle();                    //添加列表框的网格线！！！
+
+    dwStyle |= LVS_EX_FULLROWSELECT;            
+    dwStyle |= LVS_EX_GRIDLINES;                
+    m_ctllist.SetExtendedStyle(dwStyle);
+
+
+
+    m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              //添加列标题！！！！  这里的80,40,90用以设置列的宽度。！！！LVCFMT_LEFT用来设置对齐方式！！！
+    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,100);
+    m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
+    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,120);
+    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,140);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -266,24 +285,82 @@ return ;
 afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 {
 	CStdioFile dbList;
-	//std::ifstream out;
 	CString dbListPath;
 	CString dbName;
-	//char temp[100];
 	CFileLogic fileLgc;
 	dbListPath = fileLgc.GetDBListFile();
-	//out.open(dbListPath, std::ios::in);
-	//while(!out.eof()){
-	//	out.getline(temp, sizeof(VARCHAR));
-   // }
 	m_cbDBName.ResetContent();
 	if (dbList.Open(dbListPath, CFile::modeRead) == FALSE)
 		return false;
 	while(dbList.ReadString(dbName)){
-		int strLen;
-		strLen = dbName.GetLength();
 		ReadStringCharToUnicode(dbName);
 		m_cbDBName.AddString(dbName);
 	}
 	return 0;
+}
+
+
+void CdbmsDlg::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	CListCtrl m_List;
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+    pResult = 0;
+    m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
+    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
+    m_List.InsertColumn(0,_T("Field"));  
+    m_List.InsertColumn(1,_T("Data Type"));  
+	m_List.InsertColumn(0,_T("Not Null")); 
+	m_List.InsertColumn(0,_T("Primary Key"));
+	m_List.InsertColumn(0,_T("Default Value"));  
+}
+
+
+void CdbmsDlg::OnCbnSelchangeComboDbname()
+{
+	m_cbTBLName.ResetContent();
+	CString dbName = _T("");
+	CString tableFilePath = _T("");
+	CFile file;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	tableFilePath = m_fileLogic.GetTableFile(dbName);
+	try{
+		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+			throw new CAppException(_T("Failed to read the table file!"));
+		TableBlock tempTBL;
+		file.SeekToBegin();
+		CTableEntity tableE;
+		while(file.Read(&tempTBL, sizeof(TableBlock)) > 0){
+			tableE.SetBlock(tempTBL);
+			m_cbTBLName.AddString(tableE.GetName());
+		}
+	}catch(CAppException e){
+		MessageBox(_T("Failed to load table"));
+	}
+}
+
+CString CdbmsDlg::GetChosenDBName(){
+	CString dbName;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	return dbName;
+}
+
+CTableEntity CdbmsDlg::GetTableEntity(){
+	CTableEntity tableE;
+	CTableLogic tbLogic;
+	CString dbName;
+	CString tableName;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	GetDlgItemText(IDC_COMBO_TABLENAME,tableName);
+	tableName.TrimLeft();
+	tableName.TrimRight();
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	tableE.SetName(tableName);
+	tbLogic.GetTable(tableE,dbName);
+	return tableE;
 }

@@ -70,3 +70,51 @@ CString CFileLogic::GetDBListFile(void){
 	}
 	return filePath;
 }
+
+//获得表文件
+CString CFileLogic::GetTableFile(const CString strDBName)
+{
+	CString strPath = _T("");
+	try
+	{
+		// 获得表描述文件的绝对路径 (*.tb)
+		strPath.Format(_T("data\\%s\\%s.tb"), strDBName, strDBName);
+		strPath = GetAbsolutePath(strPath);
+	}
+	catch (CAppException* e)
+	{
+		throw e;
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to get tb file path!"));
+	}
+	return strPath;
+}
+
+/**************************************************
+[FunctionName]	GetTbDefineFile
+[Function]	Get the path of the table definition file
+[Argument]	const CString strDBName: Database name
+		const CString strTableName: Table name
+[ReturnedValue]	CString: Absolute path of the table definition file
+**************************************************/
+CString CFileLogic::GetTbDefineFile(const CString strDBName, const CString strTableName)
+{
+	CString strPath = _T("");
+	try
+	{
+		strPath.Format(_T("data\\%s\\%s.tdf"), strDBName, strTableName);
+		strPath = GetAbsolutePath(strPath);
+	}
+	catch (CAppException* e)
+	{
+		throw e;
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to get the path of the table definition file"));
+	}
+
+	return strPath;
+}

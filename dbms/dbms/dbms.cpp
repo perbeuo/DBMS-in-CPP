@@ -6,7 +6,8 @@
 #include "dbms.h"
 #include "dbmsDlg.h"
 #include "CDBDLG.h"
-
+#include "TBLDlg.h"
+#include "FieldDlg.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -19,6 +20,8 @@ BEGIN_MESSAGE_MAP(CdbmsApp, CWinApp)
 	ON_COMMAND(ID_SYSTEM_EXIT, &CdbmsApp::OnSystemExit)
 	ON_COMMAND(ID_HELP_ABOUTDBMS, &CdbmsApp::OnHelpAboutdbms)
 	ON_COMMAND(ID_DATABASE_CREATEDATABASE, &CdbmsApp::OnDatabaseCreatedatabase)
+	ON_COMMAND(ID_TABLE_CREATETABLE, &CdbmsApp::OnTableCreatetable)
+	ON_COMMAND(ID_FIELD_ADDFIELD, &CdbmsApp::OnFieldAddfield)
 END_MESSAGE_MAP()
 
 
@@ -118,3 +121,20 @@ void CdbmsApp::OnDatabaseCreatedatabase()
 	dlg->ShowWindow(1);
 }
 
+
+
+void CdbmsApp::OnTableCreatetable()
+{
+	CTBLDlg* dlg = new CTBLDlg;
+	dlg->Create(MAKEINTRESOURCE(IDD_CREATE_TABLE));
+	dlg->ShowWindow(1);
+}
+
+
+void CdbmsApp::OnFieldAddfield()
+{
+	// TODO: 在此添加命令处理程序代码
+	CFieldDlg* dlg = new CFieldDlg;
+	dlg->Create(MAKEINTRESOURCE(IDD_FIELD_DIALOG));
+	dlg->ShowWindow(1);
+}

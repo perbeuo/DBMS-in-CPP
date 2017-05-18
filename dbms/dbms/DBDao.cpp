@@ -72,9 +72,9 @@ bool CDBDao::GetDatabase(const CString strFilepath, CDBEntity &db){
 		return ifexist;
 	}catch(CException* e){
 	e->Delete();
-	throw new CAppException(_T("Failed to create the database file!"));
+	throw new CAppException(_T("Failed to read the database file!"));
 	}catch(...){
-	throw new CAppException(_T("Failed to create the database file!"));
+	throw new CAppException(_T("Failed to read the database file!"));
 	}
 	return false;
 }
