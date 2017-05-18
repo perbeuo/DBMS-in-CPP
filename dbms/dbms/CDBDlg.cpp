@@ -1,4 +1,4 @@
-// CDBDlg.cpp : 实现文件
+﻿// CDBDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
@@ -92,7 +92,6 @@ void CCDBDlg::OnBnClickedDbinfoOk()
 		}
 
 		CWnd *pWnd=CWnd::FindWindow(NULL,_T("dbms"));
-
 		pWnd->SendMessage(WM_UPDATE_DIALOG_DBN,NULL,0);
 	//HWND hWnd = ::FindWindowEx( this->GetParent()->m_hWnd, NULL, NULL, _T(RECEIVE1_TITLE)) ;
 	//FromHandle(hWnd)->SendMessage(WM_UPDATE_DIALOG_DBN,0,0);

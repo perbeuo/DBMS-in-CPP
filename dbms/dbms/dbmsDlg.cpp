@@ -1,5 +1,5 @@
 
-// dbmsDlg.cpp : å®ç°æ–‡ä»¶
+// dbmsDlg.cpp : ÊµÏÖÎÄ¼ş
 //
 
 #include "stdafx.h"
@@ -8,11 +8,8 @@
 #include "afxdialogex.h"
 #include "DBEntity.h"
 #include "DBLogic.h"
+#include "TableLogic.h"
 #include "TBLDlg.h"
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
@@ -22,20 +19,20 @@
 #endif
 
 
-// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
+// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// å¯¹è¯æ¡†æ•°æ®
+// ¶Ô»°¿òÊı¾İ
 	enum { IDD = IDD_ABOUTBOX };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
-// å®ç°
+// ÊµÏÖ
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -60,7 +57,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CdbmsDlg å¯¹è¯æ¡†
+// CdbmsDlg ¶Ô»°¿ò
 
 
 
@@ -75,6 +72,8 @@ void CdbmsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO_DBNAME, m_cbDBName);
+	DDX_Control(pDX, IDC_LIST2, m_ctllist);
+	DDX_Control(pDX, IDC_COMBO_TABLENAME, m_cbTBLName);
 }
 
 BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
@@ -84,10 +83,12 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CdbmsDlg::OnBnClickedOk)
 	//ON_MESSAGE(WM_UPDATA_DIALOG, &CdbmsDlg::OnUpdateDialogDB)
 	ON_MESSAGE(WM_UPDATE_DIALOG_DBN, &CdbmsDlg::OnUpdateDialogDbn)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CdbmsDlg::OnLvnItemchangedList2)
+	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
 END_MESSAGE_MAP()
 
 
-// CdbmsDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
+// CdbmsDlg ÏûÏ¢´¦Àí³ÌĞò
 
 BOOL CdbmsDlg::OnInitDialog()
 {
@@ -95,9 +96,9 @@ BOOL CdbmsDlg::OnInitDialog()
 	HMENU m_hMenu1;
 	m_hMenu1=LoadMenu(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDR_MENU1));
 	::SetMenu(this->GetSafeHwnd(),m_hMenu1);
-	// å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
+	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
 
-	// IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
+	// IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -115,14 +116,14 @@ BOOL CdbmsDlg::OnInitDialog()
 		}
 	}
 
-	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
-	//  æ‰§è¡Œæ­¤æ“ä½œ
-	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
-	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
+	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
+	//  Ö´ĞĞ´Ë²Ù×÷
+	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
+	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
 
-	// TODO: åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
+	// TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
 	hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MENU1));
-	//è¯»å–æ•°æ®åº“åå­—å¹¶æ˜¾ç¤º
+	//¶ÁÈ¡Êı¾İ¿âÃû×Ö²¢ÏÔÊ¾
 	CStdioFile dbList;
 	//std::ifstream out;
 	CString dbListPath;
@@ -147,7 +148,7 @@ BOOL CdbmsDlg::OnInitDialog()
 	DBE.SetName(_T("321"));
 	try{
 		if (dbLogic.GetDatabase(DBE) == false){
-			throw new CAppException(_T("Failed to load databaseï¼"));
+			throw new CAppException(_T("Failed to load database£¡"));
 		}
 		m_cbDBName.AddString(DBE.GetName());
 	}catch (CAppException* e){
@@ -156,7 +157,21 @@ BOOL CdbmsDlg::OnInitDialog()
 		MessageBox(errMsg, _T("ERROR"));
 	}*/
 
-	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
+	DWORD dwStyle = m_ctllist.GetExtendedStyle();                    //Ìí¼ÓÁĞ±í¿òµÄÍø¸ñÏß£¡£¡£¡
+
+    dwStyle |= LVS_EX_FULLROWSELECT;            
+    dwStyle |= LVS_EX_GRIDLINES;                
+    m_ctllist.SetExtendedStyle(dwStyle);
+
+
+
+    m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              //Ìí¼ÓÁĞ±êÌâ£¡£¡£¡£¡  ÕâÀïµÄ80,40,90ÓÃÒÔÉèÖÃÁĞµÄ¿í¶È¡££¡£¡£¡LVCFMT_LEFTÓÃÀ´ÉèÖÃ¶ÔÆë·½Ê½£¡£¡£¡
+    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,100);
+    m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
+    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,120);
+    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,140);
+
+	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
 }
 
 void CdbmsDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -172,19 +187,19 @@ void CdbmsDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
-//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
-//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
+// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
+//  À´»æÖÆ¸ÃÍ¼±ê¡£¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
+//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
 
 void CdbmsDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
+		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
+		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -192,7 +207,7 @@ void CdbmsDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// ç»˜åˆ¶å›¾æ ‡
+		// »æÖÆÍ¼±ê
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -201,8 +216,8 @@ void CdbmsDlg::OnPaint()
 	}
 }
 
-//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
-//æ˜¾ç¤ºã€‚
+//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
+//ÏÔÊ¾¡£
 HCURSOR CdbmsDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -228,7 +243,7 @@ void CdbmsDlg::OnUpdateDialogDB(){
 
 void CdbmsDlg::ReadStringCharToUnicode(CString &str)
 {
-char *szBuf = new char[str.GetLength() + 1];//æ³¨æ„â€œ+1â€ï¼Œcharå­—ç¬¦è¦æ±‚ç»“æŸç¬¦ï¼Œè€ŒCStringæ²¡æœ‰
+char *szBuf = new char[str.GetLength() + 1];//×¢Òâ¡°+1¡±£¬char×Ö·ûÒªÇó½áÊø·û£¬¶øCStringÃ»ÓĞ
 memset(szBuf, '\0',str.GetLength());
 
 int i;
@@ -236,7 +251,7 @@ for ( i = 0 ; i < str.GetLength(); i++)
 {
 szBuf[i] = (char)str.GetAt(i);
 }
-szBuf[i] = '\0';//ç»“æŸç¬¦ã€‚å¦åˆ™ä¼šåœ¨æœ«å°¾äº§ç”Ÿä¹±ç ã€‚
+szBuf[i] = '\0';//½áÊø·û¡£·ñÔò»áÔÚÄ©Î²²úÉúÂÒÂë¡£
 
 int nLen;
 WCHAR *ptch;
@@ -245,7 +260,7 @@ if(szBuf == NULL)
 {
 return ;
 }
-nLen = MultiByteToWideChar(CP_ACP, 0, szBuf, -1, NULL, 0);//è·å¾—éœ€è¦çš„å®½å­—ç¬¦å­—èŠ‚æ•°
+nLen = MultiByteToWideChar(CP_ACP, 0, szBuf, -1, NULL, 0);//»ñµÃĞèÒªµÄ¿í×Ö·û×Ö½ÚÊı
 ptch = new WCHAR[nLen];
 memset(ptch, '\0', nLen);
 MultiByteToWideChar(CP_ACP, 0, szBuf, -1, ptch, nLen);
@@ -270,12 +285,10 @@ return ;
 afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 {
 	CStdioFile dbList;
-
 	CString dbListPath;
 	CString dbName;
 	CFileLogic fileLgc;
 	dbListPath = fileLgc.GetDBListFile();
-
 	m_cbDBName.ResetContent();
 	if (dbList.Open(dbListPath, CFile::modeRead) == FALSE)
 		return false;
@@ -284,4 +297,70 @@ afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 		m_cbDBName.AddString(dbName);
 	}
 	return 0;
+}
+
+
+void CdbmsDlg::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	CListCtrl m_List;
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    pResult = 0;
+    m_List.ModifyStyle( 0, LVS_REPORT );               // ±¨±íÄ£Ê½   
+    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
+    m_List.InsertColumn(0,_T("Field"));  
+    m_List.InsertColumn(1,_T("Data Type"));  
+	m_List.InsertColumn(0,_T("Not Null")); 
+	m_List.InsertColumn(0,_T("Primary Key"));
+	m_List.InsertColumn(0,_T("Default Value"));  
+}
+
+
+void CdbmsDlg::OnCbnSelchangeComboDbname()
+{
+	m_cbTBLName.ResetContent();
+	CString dbName = _T("");
+	CString tableFilePath = _T("");
+	CFile file;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	tableFilePath = m_fileLogic.GetTableFile(dbName);
+	try{
+		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+			throw new CAppException(_T("Failed to read the table file!"));
+		TableBlock tempTBL;
+		file.SeekToBegin();
+		CTableEntity tableE;
+		while(file.Read(&tempTBL, sizeof(TableBlock)) > 0){
+			tableE.SetBlock(tempTBL);
+			m_cbTBLName.AddString(tableE.GetName());
+		}
+	}catch(CAppException e){
+		MessageBox(_T("Failed to load table"));
+	}
+}
+
+CString CdbmsDlg::GetChosenDBName(){
+	CString dbName;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	return dbName;
+}
+
+CTableEntity CdbmsDlg::GetTableEntity(){
+	CTableEntity tableE;
+	CTableLogic tbLogic;
+	CString dbName;
+	CString tableName;
+	GetDlgItemText(IDC_COMBO_DBNAME,dbName);
+	GetDlgItemText(IDC_COMBO_TABLENAME,tableName);
+	tableName.TrimLeft();
+	tableName.TrimRight();
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	tableE.SetName(tableName);
+	tbLogic.GetTable(tableE,dbName);
+	return tableE;
 }

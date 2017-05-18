@@ -25,3 +25,14 @@ struct TableBlock
 	DATETIME crtime;	// Table creation time
 	DATETIME mtime;		// Last modification time
 };
+
+
+// The definition of field block
+struct FieldBlock
+{
+	VARCHAR name;		// Name
+	INTEGER type;		// Type
+	INTEGER param;		// Parameter
+	DATETIME mtime;		// Last modification time
+	INTEGER integrities;// Integrity constraints information
+};

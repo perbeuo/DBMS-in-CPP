@@ -1,6 +1,7 @@
 #pragma once
 #include <afxdisp.h>        // MFC Automation classes
 #include <afx.h>
+#include "FieldEntity.h"
 class CTableEntity
 {
 public:

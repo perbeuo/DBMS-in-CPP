@@ -88,6 +88,27 @@
     <ClInclude Include="CDBDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TableDao.h">
+      <Filter>Dao\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TableEntity.h">
+      <Filter>Entity\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TableLogic.h">
+      <Filter>Logic\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TBLDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldEntity.h">
+      <Filter>Entity\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHelper.h">
+      <Filter>util\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -118,6 +139,27 @@
       <Filter>Logic</Filter>
     </ClCompile>
     <ClCompile Include="CDBDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TableDao.cpp">
+      <Filter>Dao</Filter>
+    </ClCompile>
+    <ClCompile Include="TableEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="TableLogic.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="TBLDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="FileHelper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
