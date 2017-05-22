@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(CdbmsApp, CWinApp)
 	ON_COMMAND(ID_DATABASE_CREATEDATABASE, &CdbmsApp::OnDatabaseCreatedatabase)
 	ON_COMMAND(ID_TABLE_CREATETABLE, &CdbmsApp::OnTableCreatetable)
 	ON_COMMAND(ID_FIELD_ADDFIELD, &CdbmsApp::OnFieldAddfield)
+	ON_COMMAND(ID_RECORD_INSERTRECORD, &CdbmsApp::OnRecordInsertrecord)
 END_MESSAGE_MAP()
 
 
@@ -137,4 +138,10 @@ void CdbmsApp::OnFieldAddfield()
 	CFieldDlg* dlg = new CFieldDlg;
 	dlg->Create(MAKEINTRESOURCE(IDD_FIELD_DIALOG));
 	dlg->ShowWindow(1);
+}
+
+
+void CdbmsApp::OnRecordInsertrecord()
+{
+	
 }

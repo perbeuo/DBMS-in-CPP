@@ -129,3 +129,5 @@ SYSTEMTIME CTableEntity::GetMTime()
 {
 	return m_tMTime;
 }
+
+

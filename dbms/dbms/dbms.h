@@ -9,7 +9,7 @@
 #endif
 
 #include "resource.h"		// 主符号
-
+#include "RecordEntity.h"
 
 // CdbmsApp:
 // 有关此类的实现，请参阅 dbms.cpp
@@ -33,6 +33,7 @@ public:
 	afx_msg void OnDatabaseCreatedatabase();
 	afx_msg void OnTableCreatetable();
 	afx_msg void OnFieldAddfield();
+	afx_msg void OnRecordInsertrecord();
 };
 
 extern CdbmsApp theApp;

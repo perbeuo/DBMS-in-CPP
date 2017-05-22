@@ -31,7 +31,8 @@ public:
 	CString GetTrdPath();
 	SYSTEMTIME GetCrTime();
 	SYSTEMTIME GetMTime();
-
+public:
+	CFieldEntity* AddField(CFieldEntity &fe);
 private:
 	// 表基本信息
 	CString m_strName;		// 表名称
@@ -41,6 +42,7 @@ private:
 	CString m_strTrdPath;	// 记录文件路径
 	SYSTEMTIME m_tCrTime;	// 表创建时间
 	SYSTEMTIME m_tMTime;	// 最后修改时间
+
 };
 
 typedef CTypedPtrArray<CPtrArray, CTableEntity*> TABLEARR;

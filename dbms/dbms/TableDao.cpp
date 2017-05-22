@@ -179,3 +179,59 @@ bool CTableDao::AddField(const CString strFilePath, CFieldEntity &fe)
 	}
 	return false;
 }
+
+
+/**************************************************
+[FunctionName]	AlterTable
+[Function]	Alter the table information
+[Argument]	const CString strFilePath: Path of the table definition file
+		CTableEntity &te: Table information entity
+[ReturnedValue]	bool: True if the operation is successful, otherwise false
+**************************************************/
+bool CTableDao::AlterTable(const CString strFilePath, CTableEntity &te)
+{
+	try
+	{
+		CFile file;
+		// Open file
+		if (file.Open(strFilePath, CFile::modeReadWrite | CFile::shareDenyWrite) == FALSE)
+		{
+			return false;
+		}
+
+		file.SeekToBegin();
+		long lOffset = file.GetPosition();
+
+		// Query table information according to the table name, then alter the it
+		bool flag = false;
+		TableBlock tb;
+		CString strName;// Table name
+		while(file.Read(&tb, sizeof(TableBlock)) > 0)
+		{
+			strName = CCharHelper::ToString(tb.name, sizeof(VARCHAR));
+			// Compare the table name
+			if (te.GetName().Compare(strName) == 0)
+			{
+				file.Seek(lOffset, CFile::begin);// The file pointer points to the position of the previous record
+				file.Write(&te.GetBlock(), sizeof(TableBlock));// Alter the table information
+				flag = true;
+				break;
+			}
+			lOffset = file.GetPosition();
+		}
+
+		// Close file
+		file.Close();
+		return flag;
+	}
+	catch (CException* e)
+	{
+		e->Delete();
+		throw new CAppException(_T("Failed to alert table!"));
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to alert table!"));
+	}
+	return false;
+}

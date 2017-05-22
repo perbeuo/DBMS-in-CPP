@@ -85,6 +85,8 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_MESSAGE(WM_UPDATE_DIALOG_DBN, &CdbmsDlg::OnUpdateDialogDbn)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CdbmsDlg::OnLvnItemchangedList2)
 	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
+	ON_CBN_SELCHANGE(IDC_COMBO_TABLENAME, &CdbmsDlg::OnCbnSelchangeComboTablename)
+	ON_BN_CLICKED(IDC_BUTTON1, &CdbmsDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -131,6 +133,7 @@ BOOL CdbmsDlg::OnInitDialog()
 	//char temp[100];
 	CFileLogic fileLgc;
 	dbListPath = fileLgc.GetDBListFile();
+
 	//out.open(dbListPath, std::ios::in);
 	//while(!out.eof()){
 	//	out.getline(temp, sizeof(VARCHAR));
@@ -158,13 +161,11 @@ BOOL CdbmsDlg::OnInitDialog()
 	}*/
 
 	DWORD dwStyle = m_ctllist.GetExtendedStyle();                    //添加列表框的网格线！！！
-
+	//m_ctllist.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
+    //m_ctllist.SetExtendedStyle(m_ctllist.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
     dwStyle |= LVS_EX_FULLROWSELECT;            
     dwStyle |= LVS_EX_GRIDLINES;                
     m_ctllist.SetExtendedStyle(dwStyle);
-
-
-
     m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              //添加列标题！！！！  这里的80,40,90用以设置列的宽度。！！！LVCFMT_LEFT用来设置对齐方式！！！
     m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,100);
     m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
@@ -235,6 +236,11 @@ BOOL CdbmsDlg::PreTranslateMessage(MSG* pMsg)
 
 void CdbmsDlg::OnBnClickedOk()
 {
+	CString dbName;
+	CString tbName;
+	dbName = GetChosenDBName();
+	tbName = GetChosenTBName();
+	MessageBox(dbName + tbName);
 }
 
 void CdbmsDlg::OnUpdateDialogDB(){
@@ -303,9 +309,9 @@ afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 void CdbmsDlg::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	CListCtrl m_List;
-	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	// TODO: 在此添加控件通知处理程序代码
-    pResult = 0;
+	//LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	//// TODO: 在此添加控件通知处理程序代码
+ //   pResult = 0;
     m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
     m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
     m_List.InsertColumn(0,_T("Field"));  
@@ -349,6 +355,14 @@ CString CdbmsDlg::GetChosenDBName(){
 	return dbName;
 }
 
+CString CdbmsDlg::GetChosenTBName(){
+	CString tbName;
+	GetDlgItemText(IDC_COMBO_TABLENAME,tbName);
+	tbName.TrimLeft();
+	tbName.TrimRight();
+	return tbName;
+}
+
 CTableEntity CdbmsDlg::GetTableEntity(){
 	CTableEntity tableE;
 	CTableLogic tbLogic;
@@ -363,4 +377,62 @@ CTableEntity CdbmsDlg::GetTableEntity(){
 	tableE.SetName(tableName);
 	tbLogic.GetTable(tableE,dbName);
 	return tableE;
+}
+
+
+void CdbmsDlg::OnCbnSelchangeComboTablename()
+{
+	/****************************************************************************
+	*
+	*
+	*m_cbTBLName.ResetContent();  瞩目：关宸不删这一行！！！！我花费了20分钟思考下面为什么获得的值是空！！！！！我绝望了！！！
+	*
+	*
+	****************************************************************************/
+	CString dbName = _T("");
+	CString tbName = _T("");
+	CString tableTdfPath = _T("");
+	CString typeName;
+	int type;
+	CFile file;
+	dbName = GetChosenDBName();
+	tbName = GetChosenTBName();
+	dbName.TrimLeft();
+	dbName.TrimRight();
+	tbName.TrimLeft();
+	tbName.TrimRight();
+	if(dbName.GetLength() == 0)
+		goto stop;
+	if(tbName.GetLength() == 0)
+		goto stop;
+	// TODO: 在此添加控件通知处理程序代码
+	tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
+	try{
+		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+			throw new CAppException(_T("Failed to read the table file!"));
+		FieldBlock tempFB;
+		file.SeekToBegin();
+		CFieldEntity FE;
+		int row = m_ctllist.GetItemCount();
+		while(file.Read(&tempFB, sizeof(tempFB)) > 0){
+			FE.SetBlock(tempFB);
+			//显示到表格
+			type = FE.GetDataType();
+			typeName = FE.GetTypeName(type);
+			m_ctllist.InsertItem(row, FE.GetName());
+			m_ctllist.SetItemText(row,1, typeName);
+			m_ctllist.SetItemText(row,2, _T(""));
+			m_ctllist.SetItemText(row,3, _T(""));
+			m_ctllist.SetItemText(row,4, FE.GetDefault());
+			row=row+1;
+		}
+	}catch(CAppException e){
+		MessageBox(_T("Failed to load table"));
+	}
+	stop:;
+}
+
+
+void CdbmsDlg::OnBnClickedButton1()
+{
 }
