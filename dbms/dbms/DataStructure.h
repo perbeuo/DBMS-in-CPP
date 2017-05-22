@@ -31,6 +31,7 @@ struct TableBlock
 struct FieldBlock
 {
 	VARCHAR name;		// Name
+	VARCHAR defaultValue; //д╛хож╣
 	INTEGER type;		// Type
 	INTEGER param;		// Parameter
 	DATETIME mtime;		// Last modification time

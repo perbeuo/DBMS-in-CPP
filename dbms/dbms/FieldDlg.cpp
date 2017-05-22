@@ -98,24 +98,40 @@ void CFieldDlg::OnBnClickedButton2()
 	CFileLogic fileLogic;
 	CString tdfPath;
 	CString dbName;
+	CString tbName;
 	CString fieldName;
+	CString defaultValue;
 	int datatype;
 	CTableEntity tableE;
 	CFieldEntity fieldE;
 	GetDlgItemText(IDC_EDIT_NAME,fieldName);
 	if(!fieldName.CompareNoCase(_T(""))){
-		MessageBox(_T("Database name cannot be empty"), _T("ERROR"));
+		MessageBox(_T("Field name cannot be empty"), _T("ERROR"));
 		goto stop;
 	}
 	HWND hWnd=::FindWindow(NULL,_T("dbms"));
 	CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
 	dbName = pWnd->GetChosenDBName();
+
+	//判断是否选择数据库
+	if(dbName.GetLength()==0){
+	    MessageBox(_T("Database name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+	//判断是否选择表
+	tbName =  pWnd->GetChosenTBName();
+	if(tbName.GetLength()==0){
+	    MessageBox(_T("Table name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+
 	tableE = pWnd->GetTableEntity();
 	tdfPath = fileLogic.GetTbDefineFile(dbName, tableE.GetName());
 	tableE.SetTdfPath(tdfPath);
 	datatype = m_cbType.GetCurSel() + 1;
 	fieldE.SetName(fieldName);
 	fieldE.SetDataType(datatype);
+	fieldE.SetDefault(defaultValue);
 
 	CTableLogic tbLogic;
 	try

@@ -47,5 +47,8 @@ public:
 	CListCtrl m_ctllist;
 	afx_msg void OnCbnSelchangeComboDbname();
 	CString GetChosenDBName();
+	CString GetChosenTBName();
 	CTableEntity GetTableEntity();
+	afx_msg void OnCbnSelchangeComboTablename();
+	afx_msg void OnBnClickedButton1();
 };

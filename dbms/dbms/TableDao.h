@@ -16,4 +16,5 @@ public:
 	bool GetTable(const CString strFilepath, CTableEntity &db);
 	//Ìí¼Ófield
 	bool AddField(const CString strFilePath, CFieldEntity &fe);
+	bool AlterTable(const CString strFilePath, CTableEntity &te);
 };

@@ -5,6 +5,7 @@
 CFieldEntity::CFieldEntity(void)
 {
 	m_strName = _T("");			// Field name
+	m_defaultValue = _T("");    // default value
 	m_nType = DT_NONE;			// Field type
 	m_nParam = -1;				// Field parameter
 	::GetLocalTime(&m_tMTime);	// Last modification time
@@ -12,9 +13,10 @@ CFieldEntity::CFieldEntity(void)
 }
 
 // Constructor
-CFieldEntity::CFieldEntity(CString strName, int nType, int nParam, int nIntegrities)
+CFieldEntity::CFieldEntity(CString strName,CString defaValue, int nType, int nParam, int nIntegrities)
 {
 	m_strName = strName;
+	m_defaultValue= defaValue;
 	m_nType = nType;
 	m_nParam = nParam;
 	m_nIntegrities = nIntegrities;
@@ -25,6 +27,7 @@ CFieldEntity::CFieldEntity(CString strName, int nType, int nParam, int nIntegrit
 CFieldEntity::CFieldEntity(CFieldEntity& fe)
 {
 	m_strName = fe.m_strName;
+	m_defaultValue = fe.m_defaultValue;
 	m_nType = fe.m_nType;
 	m_nParam = fe.m_nParam;
 	m_tMTime = fe.m_tMTime;
@@ -83,6 +86,7 @@ CString CFieldEntity::GetTypeName(int nDataType)
 void CFieldEntity::SetBlock(FieldBlock fb)
 {
 	m_strName = CCharHelper::ToString(fb.name, sizeof(VARCHAR));
+	m_defaultValue = CCharHelper::ToString(fb.defaultValue, sizeof(VARCHAR));
 	m_tMTime = fb.mtime;
 	m_nType = fb.type;
 	m_nParam = fb.param;
@@ -95,6 +99,7 @@ FieldBlock CFieldEntity::GetBlock()
 	memset(&fb, 0, sizeof(FieldBlock));
 
 	CCharHelper::ToChars(fb.name, m_strName, sizeof(VARCHAR));
+    CCharHelper::ToChars(fb.defaultValue, m_defaultValue, sizeof(VARCHAR));
 	fb.mtime = m_tMTime;
 	fb.type = m_nType;
 	fb.param = m_nParam;
@@ -108,6 +113,12 @@ void CFieldEntity::SetName(CString strName)
 {
 	m_strName = strName;
 }
+
+void CFieldEntity::SetDefault(CString strDefault)
+{
+	m_defaultValue = strDefault;
+}
+
 
 void CFieldEntity::SetDataType(int nType)
 {
@@ -130,6 +141,12 @@ CString CFieldEntity::GetName()
 {
 	return m_strName;
 }
+
+CString CFieldEntity::GetDefault()
+{
+	return m_defaultValue;
+}
+
 
 int CFieldEntity::GetDataType()
 {
