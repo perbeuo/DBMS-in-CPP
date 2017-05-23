@@ -8,6 +8,8 @@
 #include "CDBDLG.h"
 #include "TBLDlg.h"
 #include "FieldDlg.h"
+#include "RecordDlg.h"
+#include "LoginDlg.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -75,22 +77,45 @@ BOOL CdbmsApp::InitInstance()
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+  
+    CLoginDlg loginDlg; 
+	
+    if(loginDlg.DoModal() == IDOK)  
+    {  
+       CdbmsDlg dlg;  
+    m_pMainWnd = &dlg;   
+	   
+        INT_PTR nResponse = dlg.DoModal();  
+        if (nResponse == IDOK)  
+        {  
+            // TODO: 在此放置处理何时用  
+            //  “确定”来关闭对话框的代码  
+        }  
+        else if (nResponse == IDCANCEL)  
+        {  
+            // TODO: 在此放置处理何时用  
+            //  “取消”来关闭对话框的代码  
+        }  
+    }  
+    else  
+    {  
+        return FALSE;  
+    }
+	//CdbmsDlg dlg;
+	//m_pMainWnd = &dlg;
+	//INT_PTR nResponse = dlg.DoModal();
+	//if (nResponse == IDOK)
+	//{
+	//	// TODO: 在此放置处理何时用
+	//	//  “确定”来关闭对话框的代码
+	//}
+	//else if (nResponse == IDCANCEL)
+	//{
+	//	// TODO: 在此放置处理何时用
+	//	//  “取消”来关闭对话框的代码
+	//}
 
-	CdbmsDlg dlg;
-	m_pMainWnd = &dlg;
-	INT_PTR nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: 在此放置处理何时用
-		//  “确定”来关闭对话框的代码
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: 在此放置处理何时用
-		//  “取消”来关闭对话框的代码
-	}
-
-	// 删除上面创建的 shell 管理器。
+	//// 删除上面创建的 shell 管理器。
 	if (pShellManager != NULL)
 	{
 		delete pShellManager;
@@ -143,5 +168,20 @@ void CdbmsApp::OnFieldAddfield()
 
 void CdbmsApp::OnRecordInsertrecord()
 {
+	CRecordDlg* dlg = new CRecordDlg;
+	CString dbName;
+	CString tbName;
+    HWND hWnd=::FindWindow(NULL,_T("dbms"));
+	CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
+	dbName = pWnd->GetChosenDBName();
+	tbName = pWnd->GetChosenTBName();
+		if(dbName.GetLength()>0 && tbName.GetLength()>0){
+			dlg->Create(MAKEINTRESOURCE(IDD_INSERT_RECORD));
+		    dlg->ShowWindow(1);
+		}
+		
+		else{
+		    AfxMessageBox(_T("Please choose the database and table"));
+		}
 	
 }

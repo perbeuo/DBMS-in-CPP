@@ -95,6 +95,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="C:\Users\hp\Desktop\2001287084414519718.bmp" />
+    <None Include="C:\Users\hp\Desktop\timg.bmp" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ReadMe.txt" />
     <None Include="res\dbms.ico" />
@@ -114,9 +116,12 @@
     <ClInclude Include="FieldEntity.h" />
     <ClInclude Include="FileHelper.h" />
     <ClInclude Include="FileLogic.h" />
+    <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="RecordDao.h" />
+    <ClInclude Include="RecordDlg.h" />
     <ClInclude Include="RecordEntity.h" />
     <ClInclude Include="RecordLogic.h" />
+    <ClInclude Include="RegisterDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TableDao.h" />
@@ -139,9 +144,12 @@
     <ClCompile Include="FieldEntity.cpp" />
     <ClCompile Include="FileHelper.cpp" />
     <ClCompile Include="FileLogic.cpp" />
+    <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="RecordDao.cpp" />
+    <ClCompile Include="RecordDlg.cpp" />
     <ClCompile Include="RecordEntity.cpp" />
     <ClCompile Include="RecordLogic.cpp" />
+    <ClCompile Include="RegisterDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

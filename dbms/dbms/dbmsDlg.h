@@ -51,4 +51,5 @@ public:
 	CTableEntity GetTableEntity();
 	afx_msg void OnCbnSelchangeComboTablename();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedCancel();
 };

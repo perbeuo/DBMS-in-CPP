@@ -47,6 +47,7 @@ void CCDBDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CCDBDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_DBINFO_OK, &CCDBDlg::OnBnClickedDbinfoOk)
 	ON_BN_CLICKED(IDC_DB_CANCEL, &CCDBDlg::OnBnClickedDbCancel)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CCDBDlg, CDialogEx)
@@ -108,4 +109,23 @@ void CCDBDlg::OnBnClickedDbinfoOk()
 void CCDBDlg::OnBnClickedDbCancel()
 {
 	DestroyWindow( );
+}
+
+
+void CCDBDlg::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: 在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialogEx::OnPaint()
+	CRect rc;
+        GetClientRect(&rc);
+        CDC dcMem;
+        dcMem.CreateCompatibleDC(&dc);
+        CBitmap bmpBackground;
+        bmpBackground.LoadBitmap(IDB_BITMAP2);
+
+        BITMAP bitmap;
+        bmpBackground.GetBitmap(&bitmap);
+        CBitmap* pbmpPri = dcMem.SelectObject(&bmpBackground);
+        dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 }

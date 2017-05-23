@@ -87,6 +87,7 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
 	ON_CBN_SELCHANGE(IDC_COMBO_TABLENAME, &CdbmsDlg::OnCbnSelchangeComboTablename)
 	ON_BN_CLICKED(IDC_BUTTON1, &CdbmsDlg::OnBnClickedButton1)
+	/*ON_BN_CLICKED(IDCANCEL, &CdbmsDlg::OnBnClickedCancel)*/
 END_MESSAGE_MAP()
 
 
@@ -159,7 +160,7 @@ BOOL CdbmsDlg::OnInitDialog()
 		errMsg = e->GetErrorMessage();
 		MessageBox(errMsg, _T("ERROR"));
 	}*/
-
+	m_ctllist.ShowWindow(FALSE); //隐藏该控件
 	DWORD dwStyle = m_ctllist.GetExtendedStyle();                    //添加列表框的网格线！！！
 	//m_ctllist.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
     //m_ctllist.SetExtendedStyle(m_ctllist.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
@@ -196,10 +197,8 @@ void CdbmsDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // 用于绘制的设备上下文
-
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
-
+		 CPaintDC dc(this); // 用于绘制的设备上下文
+		 SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);		
 		// 使图标在工作区矩形中居中
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
@@ -213,7 +212,18 @@ void CdbmsDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+	    CPaintDC dc(this);
+        CRect rc;
+        GetClientRect(&rc);
+        CDC dcMem;
+        dcMem.CreateCompatibleDC(&dc);
+        CBitmap bmpBackground;
+        bmpBackground.LoadBitmap(IDB_BITMAP2);
+
+        BITMAP bitmap;
+        bmpBackground.GetBitmap(&bitmap);
+        CBitmap* pbmpPri = dcMem.SelectObject(&bmpBackground);
+        dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 	}
 }
 
@@ -236,11 +246,7 @@ BOOL CdbmsDlg::PreTranslateMessage(MSG* pMsg)
 
 void CdbmsDlg::OnBnClickedOk()
 {
-	CString dbName;
-	CString tbName;
-	dbName = GetChosenDBName();
-	tbName = GetChosenTBName();
-	MessageBox(dbName + tbName);
+	
 }
 
 void CdbmsDlg::OnUpdateDialogDB(){
@@ -382,7 +388,7 @@ CTableEntity CdbmsDlg::GetTableEntity(){
 
 void CdbmsDlg::OnCbnSelchangeComboTablename()
 {
-	/****************************************************************************
+/****************************************************************************
 	*
 	*
 	*m_cbTBLName.ResetContent();  瞩目：关宸不删这一行！！！！我花费了20分钟思考下面为什么获得的值是空！！！！！我绝望了！！！
@@ -406,7 +412,10 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 	if(tbName.GetLength() == 0)
 		goto stop;
 	// TODO: 在此添加控件通知处理程序代码
+	 
 	tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
+	m_ctllist.DeleteAllItems(); // 全部清空
+	 m_ctllist.ShowWindow(TRUE);//显示该控件
 	try{
 		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
 			throw new CAppException(_T("Failed to read the table file!"));

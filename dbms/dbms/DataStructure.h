@@ -13,6 +13,10 @@ struct DatabaseBlock{
 	VARCHAR filepath;	// Database file path
 	DATETIME crtime;	// Creation time
 };
+struct LoginBlock{
+     VARCHAR user;
+	 VARCHAR password;
+};
 
 // 表信息结构
 struct TableBlock

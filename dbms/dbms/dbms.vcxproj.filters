@@ -47,6 +47,12 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="C:\Users\hp\Desktop\timg.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="C:\Users\hp\Desktop\2001287084414519718.bmp">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbms.h">
@@ -121,6 +127,15 @@
     <ClInclude Include="RecordLogic.h">
       <Filter>Logic\头文件</Filter>
     </ClInclude>
+    <ClInclude Include="RecordDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -185,6 +200,15 @@
     </ClCompile>
     <ClCompile Include="RecordLogic.cpp">
       <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterDlg.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

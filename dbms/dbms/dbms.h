@@ -10,7 +10,7 @@
 
 #include "resource.h"		// 主符号
 #include "RecordEntity.h"
-
+#include "LoginDlg.h"
 // CdbmsApp:
 // 有关此类的实现，请参阅 dbms.cpp
 //
@@ -23,7 +23,8 @@ public:
 // 重写
 public:
 	virtual BOOL InitInstance();
-
+public:  
+    CLoginDlg m_loginDlg;
 // 实现
 
 	DECLARE_MESSAGE_MAP()

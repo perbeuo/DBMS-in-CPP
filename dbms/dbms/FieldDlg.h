@@ -38,4 +38,5 @@ public:
 	BOOL m_bPrimary;		// Whether is primary key
 	afx_msg void OnBnClickedButton2();
 	CString m_strError;
+	afx_msg void OnPaint();
 };

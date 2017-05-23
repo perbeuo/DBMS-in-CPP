@@ -72,6 +72,7 @@ BOOL CFieldDlg::OnInitDialog()
 
 BEGIN_MESSAGE_MAP(CFieldDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CFieldDlg::OnBnClickedButton2)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CFieldDlg, CDialogEx)
@@ -152,4 +153,23 @@ void CFieldDlg::OnBnClickedButton2()
 	}
 	DestroyWindow( );
 	stop:;
+}
+
+
+void CFieldDlg::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: 在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialogEx::OnPaint()
+	CRect rc;
+        GetClientRect(&rc);
+        CDC dcMem;
+        dcMem.CreateCompatibleDC(&dc);
+        CBitmap bmpBackground;
+        bmpBackground.LoadBitmap(IDB_BITMAP2);
+
+        BITMAP bitmap;
+        bmpBackground.GetBitmap(&bitmap);
+        CBitmap* pbmpPri = dcMem.SelectObject(&bmpBackground);
+        dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 }
