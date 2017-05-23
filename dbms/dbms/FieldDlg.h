@@ -1,6 +1,6 @@
 #pragma once
 #include "FieldEntity.h"
-
+#define WM_UPDATE_FIELDS WM_USER + 78
 // CFieldDlg ¶Ô»°¿ò
 
 class CFieldDlg : public CDialogEx

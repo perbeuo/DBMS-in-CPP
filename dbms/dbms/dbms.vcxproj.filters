@@ -53,6 +53,9 @@
     <None Include="C:\Users\hp\Desktop\2001287084414519718.bmp">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="2001287084414519718.bmp">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbms.h">

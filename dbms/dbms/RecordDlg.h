@@ -1,6 +1,8 @@
 #pragma once
 #include "FileLogic.h"
-
+#include "TableEntity.h"
+#include "TableLogic.h"
+#include "RecordLogic.h"
 // CRecordDlg 对话框
 
 class CRecordDlg : public CDialogEx
@@ -19,6 +21,9 @@ public:
 	enum { IDD = IDD_INSERT_RECORD };
 private:
     CRecordEntity m_recordEntity;	// Record the object of view
+	CTableEntity m_tableEntity;
+	CTableLogic m_tableLogic;
+	CRecordLogic m_recordLogic;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 	CFileLogic m_fileLogic;

@@ -103,7 +103,7 @@ void CLoginDlg::OnBnClickedLogin()
         MessageBox(_T("用户名或密码不能为空，请重新输入！"),_T("用户登录信息"),MB_ICONINFORMATION);  
         return;  
     }  
-    else if(this->m_UserName == "admin" && this->m_UserPassword == "12345")  
+    else if(this->m_UserName == "admin" && this->m_UserPassword == "1")  
     {  
         CDialogEx::OnOK();  
     }  

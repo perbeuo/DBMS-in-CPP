@@ -122,7 +122,7 @@ void CTBLDlg::OnBnClickedOk()
 		{
 			
 			// If creates table successfully, the created table information would be saved to the array.
-			m_arrTable.Add(pTable);
+			m_arrTable.push_back(pTable);
 			/*Name();*/
 		}
 		else

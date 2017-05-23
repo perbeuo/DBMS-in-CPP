@@ -6,8 +6,11 @@
 #include "afxcmn.h"
 #include "FileLogic.h"
 #include "TableEntity.h"
+#include "RecordLogic.h"
 #define WM_UPDATE_DIALOG_DBN WM_USER + 77
-
+#define WM_UPDATE_FIELDS WM_USER + 78
+#define WM_NEW_RECORD WM_USER + 79
+#define WM_SAVE_VALUES WM_USER + 80
 // CdbmsDlg ¶Ô»°¿ò
 class CdbmsDlg : public CDialogEx
 {
@@ -42,6 +45,12 @@ public:
 	CComboBox m_cbTBLName;
 protected:
 	afx_msg LRESULT OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnUpdateField(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnNewRecord(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSaveValues(WPARAM wParam, LPARAM lParam);
+	CTableEntity m_tableEntity;
+	CRecordLogic m_recordLogic;
+	std::vector<CString> vals;
 public:
 	afx_msg void OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_ctllist;
@@ -52,4 +61,6 @@ public:
 	afx_msg void OnCbnSelchangeComboTablename();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedShowRecord();
+	RECORDARR GetRecordArray();
 };

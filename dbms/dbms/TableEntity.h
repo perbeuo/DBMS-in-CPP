@@ -1,6 +1,7 @@
 #pragma once
-#include <afxdisp.h>        // MFC Automation classes
 #include <afx.h>
+#include <afxdisp.h>        // MFC Automation classes
+#include <vector>
 #include "FieldEntity.h"
 class CTableEntity
 {
@@ -22,7 +23,7 @@ public:
 	void SetTrdPath(const CString strTrdPath);
 	void SetCrTime(SYSTEMTIME tTime);
 	void SetMTime(SYSTEMTIME tTime);
-
+	void AddFieldNum();
 	// 返回所需值
 	CString GetName();
 	int GetRecordNum();
@@ -33,6 +34,7 @@ public:
 	SYSTEMTIME GetMTime();
 public:
 	CFieldEntity* AddField(CFieldEntity &fe);
+	CFieldEntity* GetFieldAt(int nIndex);
 private:
 	// 表基本信息
 	CString m_strName;		// 表名称
@@ -42,7 +44,7 @@ private:
 	CString m_strTrdPath;	// 记录文件路径
 	SYSTEMTIME m_tCrTime;	// 表创建时间
 	SYSTEMTIME m_tMTime;	// 最后修改时间
-
+	FIELDARRAY m_arrFields;	// Field array
 };
 
-typedef CTypedPtrArray<CPtrArray, CTableEntity*> TABLEARR;
+typedef std::vector<CTableEntity*> TABLEARR;

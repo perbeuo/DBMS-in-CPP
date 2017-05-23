@@ -77,6 +77,9 @@ END_INTERFACE_MAP()
 		//获得所需要的数据库与表名
 	    dbName = pWnd->GetChosenDBName();
 	    tbName = pWnd->GetChosenTBName();
+
+		m_tableEntity.SetName(tbName);
+		m_tableLogic.GetTable(m_tableEntity, dbName);
 		m_ctllistRecord.SetExtendedStyle(m_ctllistRecord.GetExtendedStyle() | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);   
 		tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
 	try{
@@ -93,6 +96,8 @@ END_INTERFACE_MAP()
 			//显示到表格
 			m_ctllistRecord.InsertItem(row, FE.GetName());
 			row=row+1;
+			m_tableEntity.AddField(FE);
+			//m_tableEntity.AddFieldNum();
 		}
 	}catch(CAppException e){
 		MessageBox(_T("Failed to load table"));
@@ -142,6 +147,24 @@ END_INTERFACE_MAP()
 	{
 		CString FieldValue;
 		CString Field;
+		CString dbName;
+		CString tbName;
+
+		HWND hWnd=::FindWindow(NULL,_T("dbms"));
+		CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
+
+		dbName = pWnd->GetChosenDBName();
+	//判断是否选择数据库
+		if(dbName.GetLength()==0){
+		    MessageBox(_T("Database name cannot be empty"), _T("ERROR"));
+			goto stop;
+		}
+	//判断是否选择表
+		tbName =  pWnd->GetChosenTBName();
+		if(tbName.GetLength()==0){
+		    MessageBox(_T("Table name cannot be empty"), _T("ERROR"));
+			goto stop;
+		}
 		int row = m_ctllistRecord.GetItemCount();
 		//获得第二列的值
 		for(int i = 0; i < row; i++){
@@ -149,7 +172,10 @@ END_INTERFACE_MAP()
 			FieldValue = m_ctllistRecord.GetItemText(i,1);
 		    m_recordEntity.Put(Field,FieldValue);
 		}
-
+		m_recordLogic.Insert(dbName, m_tableEntity, m_recordEntity);
+		pWnd->SendMessage(WM_NEW_RECORD,NULL,0);
+		DestroyWindow( );
+		stop:;
 	}
 
 
