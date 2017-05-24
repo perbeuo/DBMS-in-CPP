@@ -3,17 +3,19 @@
 class CFileLogic
 {
 public:
-	// å¾—åˆ°æ•°æ®åº“æè¿°æ–‡ä»¶çš„ä½ç½®
+	// µÃµ½Êı¾İ¿âÃèÊöÎÄ¼şµÄÎ»ÖÃ
 	CString GetDBFile(const CString strDBName);
-	// å¾—åˆ°æ•°æ®åº“æ–‡ä»¶å¤¹çš„ä½ç½®
+	// µÃµ½Êı¾İ¿âÎÄ¼ş¼ĞµÄÎ»ÖÃ
 	CString GetDBFolder(const CString strDBName);
-	//å¾—åˆ°æ•°æ®åº“åˆ—è¡¨æ–‡ä»¶çš„ä½ç½®
+	//µÃµ½Êı¾İ¿âÁĞ±íÎÄ¼şµÄÎ»ÖÃ
 	CString GetDBListFile(void);
-
-	// è·å¾—æ•°æ®åº“è¡¨æè¿°æ–‡ä»¶è·¯å¾„
+	// »ñµÃÊı¾İ¿â±íÃèÊöÎÄ¼şÂ·¾¶
 	CString GetTableFile(const CString strDBName);
 
+	CString GetTbDefineFile(const CString strDBName, const CString strTableName);
+
+	CString GetTbRecordFile(const CString strDBName, const CString strTableName);
 private:
-	// å°†ç›¸å¯¹è·¯å¾„è½¬åŒ–ä¸ºç»å¯¹è·¯å¾„
+	// ½«Ïà¶ÔÂ·¾¶×ª»¯Îª¾ø¶ÔÂ·¾¶
 	CString GetAbsolutePath(const CString strRelativePath);
 };

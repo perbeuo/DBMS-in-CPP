@@ -13,6 +13,10 @@ struct DatabaseBlock{
 	VARCHAR filepath;	// Database file path
 	DATETIME crtime;	// Creation time
 };
+struct LoginBlock{
+     VARCHAR user;
+	 VARCHAR password;
+};
 
 // 表信息结构
 struct TableBlock
@@ -24,4 +28,16 @@ struct TableBlock
 	VARCHAR trd;		// Path of the record file
 	DATETIME crtime;	// Table creation time
 	DATETIME mtime;		// Last modification time
+};
+
+
+// The definition of field block
+struct FieldBlock
+{
+	VARCHAR name;		// Name
+	VARCHAR defaultValue; //默认值
+	INTEGER type;		// Type
+	INTEGER param;		// Parameter
+	DATETIME mtime;		// Last modification time
+	INTEGER integrities;// Integrity constraints information
 };

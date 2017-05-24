@@ -34,4 +34,6 @@ public:
 	afx_msg void OnEnChangeDbname();
 	afx_msg void OnBnClickedOk();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnPaint();
+	afx_msg void OnEnChangeTablename();
 };

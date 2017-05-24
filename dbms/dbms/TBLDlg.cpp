@@ -45,6 +45,8 @@ void CTBLDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CTBLDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_DBNAME, &CTBLDlg::OnEnChangeDbname)
 	ON_BN_CLICKED(IDOK, &CTBLDlg::OnBnClickedOk)
+	ON_WM_PAINT()
+	ON_EN_CHANGE(IDC_TABLENAME, &CTBLDlg::OnEnChangeTablename)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CTBLDlg, CDialogEx)
@@ -107,6 +109,7 @@ void CTBLDlg::OnBnClickedOk()
 		if (dbLogic.GetDatabase(m_dbEntity) == false){
 			throw new CAppException(_T("Failed to load database！"));
 		}
+
 	}catch (CAppException* e){
 		CString errMsg;
 		errMsg = e->GetErrorMessage();
@@ -120,7 +123,7 @@ void CTBLDlg::OnBnClickedOk()
 		{
 			
 			// If creates table successfully, the created table information would be saved to the array.
-			m_arrTable.Add(pTable);
+			m_arrTable.push_back(pTable);
 			/*Name();*/
 		}
 		else
@@ -129,6 +132,10 @@ void CTBLDlg::OnBnClickedOk()
 			delete pTable;
 			pTable = NULL;
 		}
+
+		HWND hWnd=::FindWindow(NULL,_T("dbms"));
+		CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
+		pWnd->SendMessage(WM_NEW_TABLE,NULL,0);
 	}
 	catch(CAppException* e)	// Catch exception
 	{
@@ -171,4 +178,34 @@ BOOL CTBLDlg::OnInitDialog()
 	}
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
+}
+
+
+void CTBLDlg::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+	// TODO: 在此处添加消息处理程序代码
+	// 不为绘图消息调用 CDialogEx::OnPaint()
+	CRect rc;
+        GetClientRect(&rc);
+        CDC dcMem;
+        dcMem.CreateCompatibleDC(&dc);
+        CBitmap bmpBackground;
+        bmpBackground.LoadBitmap(IDB_BITMAP2);
+
+        BITMAP bitmap;
+        bmpBackground.GetBitmap(&bitmap);
+        CBitmap* pbmpPri = dcMem.SelectObject(&bmpBackground);
+        dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+}
+
+
+void CTBLDlg::OnEnChangeTablename()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
 }

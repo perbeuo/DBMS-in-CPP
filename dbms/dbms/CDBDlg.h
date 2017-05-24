@@ -25,4 +25,5 @@ protected:
 public:
 	afx_msg void OnBnClickedDbinfoOk();
 	afx_msg void OnBnClickedDbCancel();
+	afx_msg void OnPaint();
 };
