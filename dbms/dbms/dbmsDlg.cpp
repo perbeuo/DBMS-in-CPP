@@ -172,10 +172,10 @@ BOOL CdbmsDlg::OnInitDialog()
     dwStyle |= LVS_EX_GRIDLINES;                
     m_ctllist.SetExtendedStyle(dwStyle);
     m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              //添加列标题！！！！  这里的80,40,90用以设置列的宽度。！！！LVCFMT_LEFT用来设置对齐方式！！！
-    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,100);
+    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
     m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
-    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,120);
-    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,140);
+    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
+    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -318,17 +318,17 @@ afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 
 void CdbmsDlg::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	CListCtrl m_List;
-	//LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	//// TODO: 在此添加控件通知处理程序代码
- //   pResult = 0;
-    m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
-    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
-    m_List.InsertColumn(0,_T("Field"));  
-    m_List.InsertColumn(1,_T("Data Type"));  
-	m_List.InsertColumn(2,_T("Not Null")); 
-	m_List.InsertColumn(3,_T("Primary Key"));
-	m_List.InsertColumn(4,_T("Default Value"));  
+	//CListCtrl m_List;
+	////LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	////// TODO: 在此添加控件通知处理程序代码
+ ////   pResult = 0;
+ //   m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
+ //   m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
+ //   m_List.InsertColumn(0,_T("Field"));  
+ //   m_List.InsertColumn(1,_T("Data Type"));  
+	//m_List.InsertColumn(2,_T("Not Null")); 
+	//m_List.InsertColumn(3,_T("Primary Key"));
+	//m_List.InsertColumn(4,_T("Default Value"));  
 }
 
 
@@ -343,8 +343,12 @@ void CdbmsDlg::OnCbnSelchangeComboDbname()
 	dbName.TrimRight();
 	tableFilePath = m_fileLogic.GetTableFile(dbName);
 	try{
-		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+		if(m_tableDao.IsValidFile(tableFilePath) == false){
+			throw new CAppException(_T("No table in this database!"));
+		}
+		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE){
 			throw new CAppException(_T("Failed to read the table file!"));
+		}			
 		TableBlock tempTBL;
 		file.SeekToBegin();
 		CTableEntity tableE;
@@ -352,8 +356,10 @@ void CdbmsDlg::OnCbnSelchangeComboDbname()
 			tableE.SetBlock(tempTBL);
 			m_cbTBLName.AddString(tableE.GetName());
 		}
-	}catch(CAppException e){
-		MessageBox(_T("Failed to load table"));
+	}catch(CAppException* e){
+		error_msg = e->GetErrorMessage();
+		delete e;
+		MessageBox(error_msg);
 	}
 }
 
@@ -417,13 +423,24 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 	if(tbName.GetLength() == 0)
 		goto stop;
 	// TODO: 在此添加控件通知处理程序代码
-	 
+	 //int nCols = m_ctllist.GetHeaderCtrl()->GetItemCount();
+	// if(nCols == 0){
+		m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              
+		m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
+		m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
+		m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
+		m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
+	// }
 	tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
 	m_ctllist.DeleteAllItems(); // 全部清空
 	 m_ctllist.ShowWindow(TRUE);//显示该控件
 	try{
-		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+		if(m_tableDao.IsValidFile(tableTdfPath) == false){
+			throw new CAppException(_T(""));
+		}
+		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE){
 			throw new CAppException(_T("Failed to read the table file!"));
+		}
 		FieldBlock tempFB;
 		file.SeekToBegin();
 		CFieldEntity FE;
@@ -441,8 +458,12 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 			m_ctllist.SetItemText(row,4, FE.GetDefault());
 			row=row+1;
 		}
-	}catch(CAppException e){
-		MessageBox(_T("Failed to load table"));
+	}catch(CAppException* e){
+		error_msg = e->GetErrorMessage();
+		delete e;
+		if (error_msg != _T("")){
+			MessageBox(error_msg);
+		}		
 	}
 	stop:;
 }

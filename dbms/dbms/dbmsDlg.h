@@ -51,6 +51,8 @@ protected:
 	CTableEntity m_tableEntity;
 	CRecordLogic m_recordLogic;
 	std::vector<CString> vals;
+	CString error_msg;
+	CTableDao m_tableDao;
 public:
 	afx_msg void OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_ctllist;
