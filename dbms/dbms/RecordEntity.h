@@ -1,6 +1,7 @@
 #pragma once
 #include <afxdisp.h>        // MFC Automation classes
 #include <afx.h>
+#include <vector>
 /************************************************
 [ClassName]	CRecordEntity
 [Function]	Record entity class
@@ -33,4 +34,4 @@ private:
 };
 
 // Record collection definition
-typedef CTypedPtrArray<CPtrArray, CRecordEntity*> RECORDARR;
+typedef std::vector<CRecordEntity*> RECORDARR;

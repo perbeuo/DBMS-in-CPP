@@ -13,6 +13,9 @@ bool CRecordLogic::Insert(const CString strDBName,CTableEntity &te, CRecordEntit
 	try
 	{
 		// Decide whether the file exists, if there is no,a file will be created.
+		CString recordPath;
+		recordPath = m_fileLogic.GetTbRecordFile(strDBName, te.GetName());
+		te.SetTrdPath(recordPath);
 		CString strTrdPath = te.GetTrdPath();
 		if (CFileHelper::IsValidFile(strTrdPath) == false)
 		{
@@ -46,5 +49,47 @@ bool CRecordLogic::Insert(const CString strDBName,CTableEntity &te, CRecordEntit
 		throw e;
 	}
 
+	return false;
+}
+
+bool CRecordLogic::SelectAll(CTableEntity &te, RECORDARR &data)
+{
+	try
+	{
+		// Read record
+		if (m_daoRecord.SelectAll(te, data) == false)
+		{
+			return false;
+		}
+
+		return true;
+	}
+	catch (CAppException *e)
+	{
+		throw e;
+	}
+
+	return false;
+}
+
+bool CRecordLogic::AfterInsertField(const CString strDBName,CTableEntity &te, RECORDARR &data, std::vector<CString> vals){
+	try{
+		CString recordPath;
+		recordPath = m_fileLogic.GetTbRecordFile(strDBName, te.GetName());
+		if (CFileHelper::IsValidFile(recordPath) == false)
+		{
+			if(CFileHelper::CreateFile(recordPath) == false)
+			{
+				return false;
+			}
+		}
+		if (m_daoRecord.AfterInsertField(te, data, vals) == false)
+		{
+			return false;
+		}
+		return true;
+	}catch(CAppException *e){
+		throw e;
+	}
 	return false;
 }

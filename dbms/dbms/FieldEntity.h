@@ -1,6 +1,7 @@
 #pragma once
 #include <afxdisp.h>        // MFC Automation classes
 #include <afx.h>
+#include <vector>
 /************************************************
 [ClassName]	CFieldEntity
 [Function]	Field entity class
@@ -56,4 +57,4 @@ private:
 	int m_nIntegrities; // Type of integrity constraints
 };
 
-typedef CTypedPtrArray<CPtrArray, CFieldEntity*> FIELDARRAY;
+typedef std::vector<CFieldEntity*> FIELDARRAY;

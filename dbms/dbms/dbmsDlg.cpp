@@ -85,11 +85,16 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CdbmsDlg::OnBnClickedOk)
 	//ON_MESSAGE(WM_UPDATA_DIALOG, &CdbmsDlg::OnUpdateDialogDB)
 	ON_MESSAGE(WM_UPDATE_DIALOG_DBN, &CdbmsDlg::OnUpdateDialogDbn)
+	ON_MESSAGE(WM_UPDATE_FIELDS, &CdbmsDlg::OnUpdateField)
+	ON_MESSAGE(WM_NEW_RECORD, &CdbmsDlg::OnNewRecord)
+	ON_MESSAGE(WM_SAVE_VALUES, &CdbmsDlg::OnSaveValues)
+	ON_MESSAGE(WM_NEW_TABLE, &CdbmsDlg::OnNewTable)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CdbmsDlg::OnLvnItemchangedList2)
 	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
 	ON_CBN_SELCHANGE(IDC_COMBO_TABLENAME, &CdbmsDlg::OnCbnSelchangeComboTablename)
-	ON_BN_CLICKED(IDC_BUTTON1, &CdbmsDlg::OnBnClickedButton1)
+	//ON_BN_CLICKED(IDC_BUTTON1, &CdbmsDlg::OnBnClickedButton1)
 	/*ON_BN_CLICKED(IDCANCEL, &CdbmsDlg::OnBnClickedCancel)*/
+	ON_BN_CLICKED(IDC_SHOW_RECORD, &CdbmsDlg::OnBnClickedShowRecord)
 END_MESSAGE_MAP()
 
 
@@ -171,10 +176,10 @@ BOOL CdbmsDlg::OnInitDialog()
     dwStyle |= LVS_EX_GRIDLINES;                
     m_ctllist.SetExtendedStyle(dwStyle);
     m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              //添加列标题！！！！  这里的80,40,90用以设置列的宽度。！！！LVCFMT_LEFT用来设置对齐方式！！！
-    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,100);
+    m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
     m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
-    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,120);
-    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,140);
+    m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
+    m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -317,17 +322,17 @@ afx_msg LRESULT CdbmsDlg::OnUpdateDialogDbn(WPARAM wParam, LPARAM lParam)
 
 void CdbmsDlg::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	CListCtrl m_List;
-	//LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	//// TODO: 在此添加控件通知处理程序代码
- //   pResult = 0;
-    m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
-    m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
-    m_List.InsertColumn(0,_T("Field"));  
-    m_List.InsertColumn(1,_T("Data Type"));  
-	m_List.InsertColumn(0,_T("Not Null")); 
-	m_List.InsertColumn(0,_T("Primary Key"));
-	m_List.InsertColumn(0,_T("Default Value"));  
+	//CListCtrl m_List;
+	////LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	////// TODO: 在此添加控件通知处理程序代码
+ ////   pResult = 0;
+ //   m_List.ModifyStyle( 0, LVS_REPORT );               // 报表模式   
+ //   m_List.SetExtendedStyle(m_List.GetExtendedStyle() | LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT);
+ //   m_List.InsertColumn(0,_T("Field"));  
+ //   m_List.InsertColumn(1,_T("Data Type"));  
+	//m_List.InsertColumn(2,_T("Not Null")); 
+	//m_List.InsertColumn(3,_T("Primary Key"));
+	//m_List.InsertColumn(4,_T("Default Value"));  
 }
 
 
@@ -342,8 +347,12 @@ void CdbmsDlg::OnCbnSelchangeComboDbname()
 	dbName.TrimRight();
 	tableFilePath = m_fileLogic.GetTableFile(dbName);
 	try{
-		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+		if(m_tableDao.IsValidFile(tableFilePath) == false){
+			throw new CAppException(_T("No table in this database!"));
+		}
+		if (file.Open(tableFilePath, CFile::modeRead | CFile::shareDenyNone) == FALSE){
 			throw new CAppException(_T("Failed to read the table file!"));
+		}			
 		TableBlock tempTBL;
 		file.SeekToBegin();
 		CTableEntity tableE;
@@ -351,8 +360,10 @@ void CdbmsDlg::OnCbnSelchangeComboDbname()
 			tableE.SetBlock(tempTBL);
 			m_cbTBLName.AddString(tableE.GetName());
 		}
-	}catch(CAppException e){
-		MessageBox(_T("Failed to load table"));
+	}catch(CAppException* e){
+		error_msg = e->GetErrorMessage();
+		delete e;
+		MessageBox(error_msg);
 	}
 }
 
@@ -403,6 +414,7 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 	CString tableTdfPath = _T("");
 	CString typeName;
 	int type;
+	m_tableEntity = GetTableEntity();
 	CFile file;
 	dbName = GetChosenDBName();
 	tbName = GetChosenTBName();
@@ -415,19 +427,33 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 	if(tbName.GetLength() == 0)
 		goto stop;
 	// TODO: 在此添加控件通知处理程序代码
-	 
+	 int nCols = m_ctllist.GetHeaderCtrl()->GetItemCount();
+	 for (int j = 0;j < nCols;j++)
+	{
+		m_ctllist.DeleteColumn(0);
+	}
+	m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              
+	m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
+	m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
+	m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
+	m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
 	tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
 	m_ctllist.DeleteAllItems(); // 全部清空
 	 m_ctllist.ShowWindow(TRUE);//显示该控件
 	try{
-		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+		if(m_tableDao.IsValidFile(tableTdfPath) == false){
+			throw new CAppException(_T(""));
+		}
+		if (file.Open(tableTdfPath, CFile::modeRead | CFile::shareDenyNone) == FALSE){
 			throw new CAppException(_T("Failed to read the table file!"));
+		}
 		FieldBlock tempFB;
 		file.SeekToBegin();
 		CFieldEntity FE;
 		int row = m_ctllist.GetItemCount();
 		while(file.Read(&tempFB, sizeof(tempFB)) > 0){
 			FE.SetBlock(tempFB);
+			m_tableEntity.AddField(FE);
 			//显示到表格
 			type = FE.GetDataType();
 			typeName = FE.GetTypeName(type);
@@ -438,13 +464,146 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 			m_ctllist.SetItemText(row,4, FE.GetDefault());
 			row=row+1;
 		}
-	}catch(CAppException e){
-		MessageBox(_T("Failed to load table"));
+	}catch(CAppException* e){
+		error_msg = e->GetErrorMessage();
+		delete e;
+		if (error_msg != _T("")){
+			MessageBox(error_msg);
+		}		
 	}
 	stop:;
 }
 
+//
+//void CdbmsDlg::OnBnClickedButton1()
+//{
+//}
 
-void CdbmsDlg::OnBnClickedButton1()
+afx_msg LRESULT CdbmsDlg::OnUpdateField(WPARAM wParam, LPARAM lParam){		
+	CString dbName = _T("");
+	int fieldNum = 0;	
+	RECORDARR records;
+	CRecordLogic recordLogic;
+	dbName = GetChosenDBName();
+	dbName.TrimLeft();
+	dbName.TrimRight();
+
+	OnCbnSelchangeComboTablename();
+
+	fieldNum = m_tableEntity.GetFieldNum();
+	records = GetRecordArray();
+	if(fieldNum != 0 && records.size() != 0){
+		recordLogic.AfterInsertField(dbName, m_tableEntity, records, vals);
+	}
+	vals.clear();
+	return 0;
+}
+
+void CdbmsDlg::OnBnClickedShowRecord()
 {
+	CString dbName = GetChosenDBName();
+	CString tbName = GetChosenTBName();
+	CString savedData;
+	int recordnum = 0;
+	int fieldnum = 0;
+	RECORDARR records;
+		//判断是否选择数据库
+	if(dbName.GetLength()==0){
+	    MessageBox(_T("Database name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+	//判断是否选择表
+	if(tbName.GetLength()==0){
+	    MessageBox(_T("Table name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+	recordnum = m_tableEntity.GetRecordNum();
+	m_recordLogic.SelectAll(m_tableEntity, records);
+	fieldnum = m_tableEntity.GetFieldNum();
+	int nCols = m_ctllist.GetHeaderCtrl()->GetItemCount();
+	m_ctllist.DeleteAllItems();
+	for (int j = 0;j < nCols;j++)
+		{
+			m_ctllist.DeleteColumn(0);
+		}
+	
+	for (int i = 0; i < fieldnum; i++){
+			CFieldEntity* pField = m_tableEntity.GetFieldAt(i);
+			CString strFieldName = pField->GetName();
+			m_ctllist.InsertColumn(i, strFieldName, LVCFMT_LEFT,60);  
+	}
+	
+	for (int i = 0; i < recordnum; i++){
+		for (int j = 0; j < fieldnum; j++){
+			CFieldEntity* pField = m_tableEntity.GetFieldAt(j);
+			CString strFieldName = pField->GetName();
+			savedData = records[i]->Get(strFieldName);
+			if(j == 0){
+				m_ctllist.InsertItem(i, savedData);
+			}else{
+				m_ctllist.SetItemText(i ,j, savedData);
+			}
+		}
+	}
+
+	stop:;
+}
+
+RECORDARR CdbmsDlg::GetRecordArray(){
+	CString dbName = GetChosenDBName();
+	CString tbName = GetChosenTBName();
+	RECORDARR records;
+		//判断是否选择数据库
+	if(dbName.GetLength()==0){
+	    MessageBox(_T("Database name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+	//判断是否选择表
+	if(tbName.GetLength()==0){
+	    MessageBox(_T("Table name cannot be empty"), _T("ERROR"));
+		goto stop;
+	}
+	m_recordLogic.SelectAll(m_tableEntity, records);
+
+stop:;
+	return records;
+}
+
+afx_msg LRESULT CdbmsDlg::OnNewRecord(WPARAM wParam, LPARAM lParam){
+	int recordNum = 0;
+	recordNum = m_tableEntity.GetRecordNum() + 1;
+	m_tableEntity.SetRecordNum(recordNum);
+	return 0;
+}
+afx_msg LRESULT CdbmsDlg::OnSaveValues(WPARAM wParam, LPARAM lParam){
+	CString dbName = _T("");
+	int recordNum = 0;
+	int fieldNum = 0;	
+	RECORDARR records;
+	CRecordLogic recordLogic;
+	CRecordEntity* recordEntity;
+	CFieldEntity* fieldEntity;
+
+	dbName = GetChosenDBName();
+	dbName.Trim();
+	recordNum = m_tableEntity.GetRecordNum();
+	fieldNum = m_tableEntity.GetFieldNum();
+	if(fieldNum != 0 && recordNum != 0){
+		records = GetRecordArray();
+		for(int i = 0; i < recordNum; i++){
+			recordEntity = records[i];
+			for(int j = 0; j < fieldNum; j++){
+				fieldEntity = m_tableEntity.GetFieldAt(j);
+				CString strFieldName = fieldEntity->GetName();
+				CString strVal = recordEntity->Get(strFieldName);
+				vals.push_back(strVal);
+			}
+		}
+	}
+	return 0;
+}
+
+afx_msg LRESULT CdbmsDlg::OnNewTable(WPARAM wParam, LPARAM lParam){
+	OnCbnSelchangeComboDbname();
+	return 0;
 }

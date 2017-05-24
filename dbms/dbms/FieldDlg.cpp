@@ -125,7 +125,7 @@ void CFieldDlg::OnBnClickedButton2()
 	    MessageBox(_T("Table name cannot be empty"), _T("ERROR"));
 		goto stop;
 	}
-
+	pWnd->SendMessage(WM_SAVE_VALUES,NULL,0);
 	tableE = pWnd->GetTableEntity();
 	tdfPath = fileLogic.GetTbDefineFile(dbName, tableE.GetName());
 	tableE.SetTdfPath(tdfPath);
@@ -144,6 +144,8 @@ void CFieldDlg::OnBnClickedButton2()
 		}
 		//CFieldEntity* pField = m_pEditTable->AddField(field);
 		//return pField;
+		//CWnd *pWnd=CWnd::FindWindow(NULL,_T("dbms"));
+		pWnd->SendMessage(WM_UPDATE_FIELDS,NULL,0);
 	}
 	catch(CAppException* e)
 	{

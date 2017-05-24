@@ -3,19 +3,22 @@
 class CFileLogic
 {
 public:
-	// µÃµ½Êı¾İ¿âÃèÊöÎÄ¼şµÄÎ»ÖÃ
+	// å¾—åˆ°æ•°æ®åº“æè¿°æ–‡ä»¶çš„ä½ç½®
 	CString GetDBFile(const CString strDBName);
-	// µÃµ½Êı¾İ¿âÎÄ¼ş¼ĞµÄÎ»ÖÃ
+	// å¾—åˆ°æ•°æ®åº“æ–‡ä»¶å¤¹çš„ä½ç½®
 	CString GetDBFolder(const CString strDBName);
-	//µÃµ½Êı¾İ¿âÁĞ±íÎÄ¼şµÄÎ»ÖÃ
+	//å¾—åˆ°æ•°æ®åº“åˆ—è¡¨æ–‡ä»¶çš„ä½ç½®
 	CString GetDBListFile(void);
-	// »ñµÃÊı¾İ¿â±íÃèÊöÎÄ¼şÂ·¾¶
+	// è·å¾—æ•°æ®åº“è¡¨æè¿°æ–‡ä»¶è·¯å¾„
 	CString GetTableFile(const CString strDBName);
 
 	CString GetTbDefineFile(const CString strDBName, const CString strTableName);
-	
-    CString CFileLogic::GetUserFile();
+
+  CString CFileLogic::GetUserFile();
+
+	CString GetTbRecordFile(const CString strDBName, const CString strTableName);
+
 private:
-	// ½«Ïà¶ÔÂ·¾¶×ª»¯Îª¾ø¶ÔÂ·¾¶
+	// å°†ç›¸å¯¹è·¯å¾„è½¬åŒ–ä¸ºç»å¯¹è·¯å¾„
 	CString GetAbsolutePath(const CString strRelativePath);
 };

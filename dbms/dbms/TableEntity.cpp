@@ -28,7 +28,11 @@ CTableEntity::CTableEntity(CString strName)
 //Îö¹¹º¯Êý
 CTableEntity::~CTableEntity(void)
 {
-
+	int nCount = m_arrFields.size();
+	for (int i = 0;  i < nCount; i++)
+	{
+		m_arrFields.pop_back();
+	}
 }
 
 
@@ -107,7 +111,7 @@ int CTableEntity::GetRecordNum()
 
 int CTableEntity::GetFieldNum()
 {
-	return m_nFieldNum;
+	return m_arrFields.size();
 }
 
 CString CTableEntity::GetTdfPath()
@@ -131,3 +135,20 @@ SYSTEMTIME CTableEntity::GetMTime()
 }
 
 
+void CTableEntity::AddFieldNum(){
+	m_nFieldNum = m_nFieldNum + 1;
+}
+
+CFieldEntity* CTableEntity::AddField(CFieldEntity &fe)
+{
+	// Add field
+	CFieldEntity* pField = new CFieldEntity(fe);
+	//m_arrFields.Add(pField);
+	m_arrFields.push_back(pField);
+	return pField;
+}
+
+CFieldEntity* CTableEntity::GetFieldAt(int nIndex)
+{
+	return m_arrFields[nIndex];
+}
