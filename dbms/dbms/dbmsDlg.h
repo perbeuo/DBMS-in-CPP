@@ -21,10 +21,9 @@ public:
 
 // 对话框数据
 	enum { IDD = IDD_DBMS_DIALOG };
-
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
-
+   
 
 // 实现
 protected:
@@ -38,6 +37,7 @@ protected:
 	afx_msg void OnUpdateDialogDB();
 	DECLARE_MESSAGE_MAP()
 	void ReadStringCharToUnicode(CString &str);
+	 BOOL PlaySound(LPCSTR lpszSound, HMODULE hmod, UINT fuSound);
 public:
 	HACCEL hAccel;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

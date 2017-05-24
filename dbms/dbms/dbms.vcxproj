@@ -102,6 +102,7 @@
     <None Include="ReadMe.txt" />
     <None Include="res\dbms.ico" />
     <None Include="res\dbms.rc2" />
+    <None Include="res\wav1.bin" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppException.h" />
@@ -131,6 +132,9 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TBLDlg.h" />
     <ClInclude Include="TimeHelper.h" />
+    <ClInclude Include="UserDao.h" />
+    <ClInclude Include="UserEntity.h" />
+    <ClInclude Include="UserLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppException.cpp" />
@@ -160,6 +164,9 @@
     <ClCompile Include="TableLogic.cpp" />
     <ClCompile Include="TBLDlg.cpp" />
     <ClCompile Include="TimeHelper.cpp" />
+    <ClCompile Include="UserDao.cpp" />
+    <ClCompile Include="UserEntity.cpp" />
+    <ClCompile Include="UserLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dbms.rc" />
