@@ -100,7 +100,7 @@ void CLoginDlg::OnBnClickedLogin()
 	 CFile file;
     if(this->m_UserName.IsEmpty() || this->m_UserPassword.IsEmpty())  
     {  
-        MessageBox(_T("用户名或密码不能为空，请重新输入！"),_T("用户登录信息"),MB_ICONINFORMATION);  
+        MessageBox(_T("The user name and password cannot be vacant!"),_T("User login info"),MB_ICONINFORMATION);  
         return;  
 
     }   
@@ -120,7 +120,7 @@ void CLoginDlg::OnBnClickedLogin()
 					OnOK();    // 假如用户名和密码正确，就关闭对话框
 					goto stop;
 				}else{
-					throw new CAppException(_T("密码不正确"));
+					throw new CAppException(_T("Wrong password"));
 			   // MessageBox(_T("密码不正确"));
 				goto stop;
 				}
@@ -128,7 +128,7 @@ void CLoginDlg::OnBnClickedLogin()
 			}
 			
 		} 
-		throw new CAppException(_T("请输入正确的用户名"));
+		throw new CAppException(_T("Please input a valid username"));
 		//MessageBox(_T("请输入正确的用户名"));
 		stop:;
 	}catch(CAppException* e){
