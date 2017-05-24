@@ -95,7 +95,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="2001287084414519718.bmp" />
     <None Include="C:\Users\hp\Desktop\2001287084414519718.bmp" />
     <None Include="C:\Users\hp\Desktop\timg.bmp" />
     <None Include="ClassDiagram1.cd" />
