@@ -86,6 +86,7 @@ BEGIN_MESSAGE_MAP(CdbmsDlg, CDialogEx)
 	ON_MESSAGE(WM_UPDATE_FIELDS, &CdbmsDlg::OnUpdateField)
 	ON_MESSAGE(WM_NEW_RECORD, &CdbmsDlg::OnNewRecord)
 	ON_MESSAGE(WM_SAVE_VALUES, &CdbmsDlg::OnSaveValues)
+	ON_MESSAGE(WM_NEW_TABLE, &CdbmsDlg::OnNewTable)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CdbmsDlg::OnLvnItemchangedList2)
 	ON_CBN_SELCHANGE(IDC_COMBO_DBNAME, &CdbmsDlg::OnCbnSelchangeComboDbname)
 	ON_CBN_SELCHANGE(IDC_COMBO_TABLENAME, &CdbmsDlg::OnCbnSelchangeComboTablename)
@@ -423,14 +424,16 @@ void CdbmsDlg::OnCbnSelchangeComboTablename()
 	if(tbName.GetLength() == 0)
 		goto stop;
 	// TODO: 在此添加控件通知处理程序代码
-	 //int nCols = m_ctllist.GetHeaderCtrl()->GetItemCount();
-	// if(nCols == 0){
-		m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              
-		m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
-		m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
-		m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
-		m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
-	// }
+	 int nCols = m_ctllist.GetHeaderCtrl()->GetItemCount();
+	 for (int j = 0;j < nCols;j++)
+	{
+		m_ctllist.DeleteColumn(0);
+	}
+	m_ctllist.InsertColumn(0,_T("Field "),LVCFMT_LEFT,60);              
+	m_ctllist.InsertColumn(1,_T("Data Type"),LVCFMT_LEFT,90);
+	m_ctllist.InsertColumn(2,_T("Not Null"),LVCFMT_LEFT,80);
+	m_ctllist.InsertColumn(3,_T("Primary key"),LVCFMT_LEFT,80);
+	m_ctllist.InsertColumn(4,_T("Default Value"),LVCFMT_LEFT,100);
 	tableTdfPath = m_fileLogic.GetTbDefineFile(dbName,tbName);
 	m_ctllist.DeleteAllItems(); // 全部清空
 	 m_ctllist.ShowWindow(TRUE);//显示该控件
@@ -594,5 +597,10 @@ afx_msg LRESULT CdbmsDlg::OnSaveValues(WPARAM wParam, LPARAM lParam){
 			}
 		}
 	}
+	return 0;
+}
+
+afx_msg LRESULT CdbmsDlg::OnNewTable(WPARAM wParam, LPARAM lParam){
+	OnCbnSelchangeComboDbname();
 	return 0;
 }

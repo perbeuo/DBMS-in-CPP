@@ -109,6 +109,7 @@ void CTBLDlg::OnBnClickedOk()
 		if (dbLogic.GetDatabase(m_dbEntity) == false){
 			throw new CAppException(_T("Failed to load database£¡"));
 		}
+
 	}catch (CAppException* e){
 		CString errMsg;
 		errMsg = e->GetErrorMessage();
@@ -131,6 +132,10 @@ void CTBLDlg::OnBnClickedOk()
 			delete pTable;
 			pTable = NULL;
 		}
+
+		HWND hWnd=::FindWindow(NULL,_T("dbms"));
+		CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
+		pWnd->SendMessage(WM_NEW_TABLE,NULL,0);
 	}
 	catch(CAppException* e)	// Catch exception
 	{
