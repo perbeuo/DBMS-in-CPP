@@ -14,7 +14,8 @@ class CRecordLogic
 public:
 	// Create new rows in a table
 	bool Insert(const CString strDBName, CTableEntity &te, CRecordEntity &re);
-
+	bool SelectAll(CTableEntity &te, RECORDARR &data);
+	bool CRecordLogic::AfterInsertField(const CString strDBName,CTableEntity &te, RECORDARR &data, std::vector<CString> vals);
 private:
 	CRecordDao m_daoRecord;	// Record data operation object
 	CTableDao m_daoTable;	// Table data operation object

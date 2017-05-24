@@ -109,6 +109,7 @@ void CTBLDlg::OnBnClickedOk()
 		if (dbLogic.GetDatabase(m_dbEntity) == false){
 			throw new CAppException(_T("Failed to load database£¡"));
 		}
+
 	}catch (CAppException* e){
 		CString errMsg;
 		errMsg = e->GetErrorMessage();
@@ -122,7 +123,7 @@ void CTBLDlg::OnBnClickedOk()
 		{
 			
 			// If creates table successfully, the created table information would be saved to the array.
-			m_arrTable.Add(pTable);
+			m_arrTable.push_back(pTable);
 			/*Name();*/
 		}
 		else
@@ -131,6 +132,10 @@ void CTBLDlg::OnBnClickedOk()
 			delete pTable;
 			pTable = NULL;
 		}
+
+		HWND hWnd=::FindWindow(NULL,_T("dbms"));
+		CdbmsDlg* pWnd= (CdbmsDlg*)CdbmsDlg::FromHandle(hWnd);
+		pWnd->SendMessage(WM_NEW_TABLE,NULL,0);
 	}
 	catch(CAppException* e)	// Catch exception
 	{

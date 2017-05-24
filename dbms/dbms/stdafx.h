@@ -22,7 +22,7 @@
 
 #include <afxwin.h>         // MFC 核心组件和标准组件
 #include <afxext.h>         // MFC 扩展
-
+#include <afxtempl.h>
 
 #include <afxdisp.h>        // MFC 自动化类
 
@@ -40,7 +40,20 @@
 
 #include "AppException.h"	// Custom exception class
 #include "DataStructure.h"	// Data structure definition class
+#include "FileHelper.h"		// File operations tool class
 #include "CharHelper.h"		// Character processing tool class
+#include "TimeHelper.h"		// Time processing tool class
+
+#ifdef _UNICODE
+#if defined _M_IX86
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif
+#endif
+
 
 
 

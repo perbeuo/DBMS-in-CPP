@@ -118,3 +118,23 @@ CString CFileLogic::GetTbDefineFile(const CString strDBName, const CString strTa
 
 	return strPath;
 }
+
+CString CFileLogic::GetTbRecordFile(const CString strDBName, const CString strTableName)
+{
+	CString strPath = _T("");
+	try
+	{
+		strPath.Format(_T("data\\%s\\%s.trd"), strDBName, strTableName);
+		strPath = GetAbsolutePath(strPath);
+	}
+	catch (CAppException* e)
+	{
+		throw e;
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to get the path of the table record file!"));
+	}
+
+	return strPath;
+}
