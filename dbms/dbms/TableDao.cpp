@@ -235,3 +235,4 @@ bool CTableDao::AlterTable(const CString strFilePath, CTableEntity &te)
 	}
 	return false;
 }
+

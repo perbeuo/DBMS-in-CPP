@@ -1,13 +1,11 @@
-// LoginDlg.cpp : ÊµÏÖÎÄ¼þ
-//
-
+// LoginDlg.cpp : å®žçŽ°æ–‡ä»¶
 #include "stdafx.h"
 #include "dbms.h"
 #include "LoginDlg.h"
 #include "afxdialogex.h"
 #include "RegisterDlg.h"
-
-// CLoginDlg ¶Ô»°¿ò
+#include "FileLogic.h"
+// CLoginDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CLoginDlg, CDialogEx)
 
@@ -30,10 +28,10 @@ CLoginDlg::~CLoginDlg()
 
 void CLoginDlg::OnFinalRelease()
 {
-	// ÊÍ·ÅÁË¶Ô×Ô¶¯»¯¶ÔÏóµÄ×îºóÒ»¸öÒýÓÃºó£¬½«µ÷ÓÃ
-	// OnFinalRelease¡£»ùÀà½«×Ô¶¯
-	// É¾³ý¸Ã¶ÔÏó¡£ÔÚµ÷ÓÃ¸Ã»ùÀàÖ®Ç°£¬ÇëÌí¼ÓÄúµÄ
-	// ¶ÔÏóËùÐèµÄ¸½¼ÓÇåÀí´úÂë¡£
+	// é‡Šæ”¾äº†å¯¹è‡ªåŠ¨åŒ–å¯¹è±¡çš„æœ€åŽä¸€ä¸ªå¼•ç”¨åŽï¼Œå°†è°ƒç”¨
+	// OnFinalReleaseã€‚åŸºç±»å°†è‡ªåŠ¨
+	// åˆ é™¤è¯¥å¯¹è±¡ã€‚åœ¨è°ƒç”¨è¯¥åŸºç±»ä¹‹å‰ï¼Œè¯·æ·»åŠ æ‚¨çš„
+	// å¯¹è±¡æ‰€éœ€çš„é™„åŠ æ¸…ç†ä»£ç ã€‚
 
 	CDialogEx::OnFinalRelease();
 }
@@ -58,13 +56,12 @@ BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_LOGIN, &CLoginDlg::OnBnClickedLogin)
 	ON_BN_CLICKED(IDC_REGISTER, &CLoginDlg::OnBnClickedRegister)
 END_MESSAGE_MAP()
-
 BEGIN_DISPATCH_MAP(CLoginDlg, CDialogEx)
 END_DISPATCH_MAP()
 
-// ×¢Òâ: ÎÒÃÇÌí¼Ó IID_ILoginDlg Ö§³Ö
-//  ÒÔÖ§³ÖÀ´×Ô VBA µÄÀàÐÍ°²È«°ó¶¨¡£´Ë IID ±ØÐëÍ¬¸½¼Óµ½ .IDL ÎÄ¼þÖÐµÄ
-//  µ÷¶È½Ó¿ÚµÄ GUID Æ¥Åä¡£
+// æ³¨æ„: æˆ‘ä»¬æ·»åŠ  IID_ILoginDlg æ”¯æŒ
+//  ä»¥æ”¯æŒæ¥è‡ª VBA çš„ç±»åž‹å®‰å…¨ç»‘å®šã€‚æ­¤ IID å¿…é¡»åŒé™„åŠ åˆ° .IDL æ–‡ä»¶ä¸­çš„
+//  è°ƒåº¦æŽ¥å£çš„ GUID åŒ¹é…ã€‚
 
 // {9D5F1BB5-8B82-4CB3-A673-85572C61A3EA}
 static const IID IID_ILoginDlg =
@@ -79,8 +76,8 @@ END_INTERFACE_MAP()
 void CLoginDlg::OnPaint()
 {
 	CPaintDC dc(this); // device context for painting
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌÐò´úÂë
-	// ²»Îª»æÍ¼ÏûÏ¢µ÷ÓÃ CDialogEx::OnPaint()
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
+	// ä¸ä¸ºç»˜å›¾æ¶ˆæ¯è°ƒç”¨ CDialogEx::OnPaint()
 	CRect rc;
         GetClientRect(&rc);
         CDC dcMem;
@@ -94,25 +91,55 @@ void CLoginDlg::OnPaint()
         dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 }
 
-
 void CLoginDlg::OnBnClickedLogin()
 {
 	 this->UpdateData(true);  
+	 CString Path = _T("");
+	 CFileLogic  fileLogic;
+	 CUserEntity ue;
+	 CFile file;
     if(this->m_UserName.IsEmpty() || this->m_UserPassword.IsEmpty())  
     {  
-        MessageBox(_T("ÓÃ»§Ãû»òÃÜÂë²»ÄÜÎª¿Õ£¬ÇëÖØÐÂÊäÈë£¡"),_T("ÓÃ»§µÇÂ¼ÐÅÏ¢"),MB_ICONINFORMATION);  
+        MessageBox(_T("ç”¨æˆ·åæˆ–å¯†ç ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥ï¼"),_T("ç”¨æˆ·ç™»å½•ä¿¡æ¯"),MB_ICONINFORMATION);  
         return;  
-    }  
-    else if(this->m_UserName == "admin" && this->m_UserPassword == "1")  
-    {  
-        CDialogEx::OnOK();  
-    }  
+
+    }   
+
     else  
     {  
-        MessageBox(_T("ÓÃ»§Ãû»òÃÜÂë²»ÕýÈ·£¬ÇëÖØÐÂÊäÈë£¡"),_T("µÇÂ¼Ê§°Ü"),MB_ICONERROR);  
-        return;  
+		Path = fileLogic.GetUserFile();
+			try{
+		if (file.Open(Path, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+			throw new CAppException(_T("Failed to read the table file!"));
+		LoginBlock tempLB;
+		file.SeekToBegin();
+		while(file.Read(&tempLB, sizeof(tempLB)) > 0){
+			ue.SetBlock(tempLB);
+			if(m_UserName==ue.GetName()){
+				if(m_UserPassword==ue.GetPassword()){
+					OnOK();    // å‡å¦‚ç”¨æˆ·åå’Œå¯†ç æ­£ç¡®ï¼Œå°±å…³é—­å¯¹è¯æ¡†
+					goto stop;
+				}else{
+					throw new CAppException(_T("å¯†ç ä¸æ­£ç¡®"));
+			   // MessageBox(_T("å¯†ç ä¸æ­£ç¡®"));
+				goto stop;
+				}
+
+			}
+			
+		} 
+		throw new CAppException(_T("è¯·è¾“å…¥æ­£ç¡®çš„ç”¨æˆ·å"));
+		//MessageBox(_T("è¯·è¾“å…¥æ­£ç¡®çš„ç”¨æˆ·å"));
+		stop:;
+	}catch(CAppException* e){
+		CString m_strError = e->GetErrorMessage();
+		delete e;
+		MessageBox(m_strError, _T("ERROR"));
+	}
+       
     }  
 }
+
 
 
 void CLoginDlg::OnBnClickedRegister()

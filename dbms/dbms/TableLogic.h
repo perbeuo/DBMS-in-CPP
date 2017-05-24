@@ -3,7 +3,6 @@
 #include "TableDao.h"
 #include "FileLogic.h"
 #include "FieldEntity.h"
-
 class CTableLogic
 {
 public:

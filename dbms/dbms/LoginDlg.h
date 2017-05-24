@@ -1,6 +1,5 @@
 #pragma once
-
-
+#include "afxwin.h"
 // CLoginDlg ¶Ô»°¿ò
 
 class CLoginDlg : public CDialogEx
