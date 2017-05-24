@@ -118,3 +118,23 @@ CString CFileLogic::GetTbDefineFile(const CString strDBName, const CString strTa
 
 	return strPath;
 }
+
+CString CFileLogic::GetUserFile()
+{
+	CString strPath = _T("");
+	try
+	{
+		strPath.Format(_T("data\\user\\information.txt"));
+		strPath = GetAbsolutePath(strPath);
+	}
+	catch (CAppException* e)
+	{
+		throw e;
+	}
+	catch (...)
+	{
+		throw new CAppException(_T("Failed to get the user information file"));
+	}
+
+	return strPath;
+}

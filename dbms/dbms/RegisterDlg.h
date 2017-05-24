@@ -1,6 +1,8 @@
 #pragma once
-
-
+#include "UserEntity.h"
+#include "FileLogic.h"
+#include "TableLogic.h"
+#include "UserLogic.h"
 // CRegisterDlg ¶Ô»°¿ò
 
 class CRegisterDlg : public CDialogEx
@@ -22,4 +24,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DISPATCH_MAP()
 	DECLARE_INTERFACE_MAP()
+public:
+	afx_msg void OnBnClickedOk();
+	CString m_NewName;
+	CString m_NewPassword;
+	CString m_AgainPassword;
+	afx_msg void OnPaint();
+	CString m_strError;
 };

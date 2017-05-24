@@ -1,12 +1,10 @@
 // LoginDlg.cpp : 实现文件
-//
-
 #include "stdafx.h"
 #include "dbms.h"
 #include "LoginDlg.h"
 #include "afxdialogex.h"
 #include "RegisterDlg.h"
-
+#include "FileLogic.h"
 // CLoginDlg 对话框
 
 IMPLEMENT_DYNAMIC(CLoginDlg, CDialogEx)
@@ -94,25 +92,53 @@ void CLoginDlg::OnPaint()
         dc.StretchBlt(0,0,rc.Width(), rc.Height(), &dcMem,0,0,bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 }
 
-
 void CLoginDlg::OnBnClickedLogin()
 {
 	 this->UpdateData(true);  
+	 CString Path = _T("");
+	 CFileLogic  fileLogic;
+	 CUserEntity ue;
+	 CFile file;
     if(this->m_UserName.IsEmpty() || this->m_UserPassword.IsEmpty())  
     {  
         MessageBox(_T("用户名或密码不能为空，请重新输入！"),_T("用户登录信息"),MB_ICONINFORMATION);  
         return;  
-    }  
-    else if(this->m_UserName == "admin" && this->m_UserPassword == "12345")  
-    {  
-        CDialogEx::OnOK();  
-    }  
+    }   
     else  
     {  
-        MessageBox(_T("用户名或密码不正确，请重新输入！"),_T("登录失败"),MB_ICONERROR);  
-        return;  
+		Path = fileLogic.GetUserFile();
+			try{
+		if (file.Open(Path, CFile::modeRead | CFile::shareDenyNone) == FALSE)
+			throw new CAppException(_T("Failed to read the table file!"));
+		LoginBlock tempLB;
+		file.SeekToBegin();
+		while(file.Read(&tempLB, sizeof(tempLB)) > 0){
+			ue.SetBlock(tempLB);
+			if(m_UserName==ue.GetName()){
+				if(m_UserPassword==ue.GetPassword()){
+					OnOK();    // 假如用户名和密码正确，就关闭对话框
+					goto stop;
+				}else{
+					throw new CAppException(_T("密码不正确"));
+			   // MessageBox(_T("密码不正确"));
+				goto stop;
+				}
+
+			}
+			
+		} 
+		throw new CAppException(_T("请输入正确的用户名"));
+		//MessageBox(_T("请输入正确的用户名"));
+		stop:;
+	}catch(CAppException* e){
+		CString m_strError = e->GetErrorMessage();
+		delete e;
+		MessageBox(m_strError, _T("ERROR"));
+	}
+       
     }  
 }
+
 
 
 void CLoginDlg::OnBnClickedRegister()

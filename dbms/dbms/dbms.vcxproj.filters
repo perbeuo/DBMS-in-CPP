@@ -53,6 +53,9 @@
     <None Include="C:\Users\hp\Desktop\2001287084414519718.bmp">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\wav1.bin">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbms.h">
@@ -136,6 +139,15 @@
     <ClInclude Include="RegisterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UserEntity.h">
+      <Filter>Entity\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UserDao.h">
+      <Filter>Dao\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UserLogic.h">
+      <Filter>Logic\头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbms.cpp">
@@ -209,6 +221,15 @@
     </ClCompile>
     <ClCompile Include="RegisterDlg.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UserEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDao.cpp">
+      <Filter>Dao</Filter>
+    </ClCompile>
+    <ClCompile Include="UserLogic.cpp">
+      <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

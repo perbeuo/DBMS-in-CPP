@@ -13,6 +13,8 @@ public:
 	CString GetTableFile(const CString strDBName);
 
 	CString GetTbDefineFile(const CString strDBName, const CString strTableName);
+	
+    CString CFileLogic::GetUserFile();
 private:
 	// 将相对路径转化为绝对路径
 	CString GetAbsolutePath(const CString strRelativePath);

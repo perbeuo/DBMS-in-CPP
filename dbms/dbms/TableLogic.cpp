@@ -90,3 +90,5 @@ bool CTableLogic::AddField(const CString strDBName, CTableEntity &te, CFieldEnti
 
 	return false;
 }
+
+

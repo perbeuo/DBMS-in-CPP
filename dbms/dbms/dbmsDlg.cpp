@@ -13,7 +13,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-
+#include<windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "WINMM.LIB")
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -106,6 +108,7 @@ BOOL CdbmsDlg::OnInitDialog()
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
+	PlaySound(TEXT("music.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	if (pSysMenu != NULL)
 	{
 		BOOL bNameValid;
